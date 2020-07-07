@@ -22,7 +22,7 @@ export default {
       tabbar: [
         {
           name: "主页",
-          img: require("@/assets/img/tabbar/home.svg"),
+          img: require("assets/img/tabbar/home.svg"),
           aimg: require("@/assets/img/tabbar/home_active.svg"),
           src: "/home"
         },

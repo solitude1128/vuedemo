@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import tabBar from "@/components/tabbar/TabBar";
-import tabBarItem from "@/components/tabbar/TabBarItem";
+import tabBar from "@/components/common/tabbar/TabBar";
+import tabBarItem from "@/components/common/tabbar/TabBarItem";
 export default {
   name: "MainTabbar",
   components: {
@@ -22,26 +22,26 @@ export default {
       tabbar: [
         {
           name: "主页",
-          img: require("@/assets/images/tabbar/home.svg"),
-          aimg: require("@/assets/images/tabbar/home_active.svg"),
+          img: require("@/assets/img/tabbar/home.svg"),
+          aimg: require("@/assets/img/tabbar/home_active.svg"),
           src: "/home"
         },
         {
           name: "分类",
-          img: require("@/assets/images/tabbar/category.svg"),
-          aimg: require("@/assets/images/tabbar/category_active.svg"),
+          img: require("@/assets/img/tabbar/category.svg"),
+          aimg: require("@/assets/img/tabbar/category_active.svg"),
           src: "/category"
         },
         {
           name: "购物车",
-          img: require("@/assets/images/tabbar/shopcart.svg"),
-          aimg: require("@/assets/images/tabbar/shopcart_active.svg"),
+          img: require("@/assets/img/tabbar/shopcart.svg"),
+          aimg: require("@/assets/img/tabbar/shopcart_active.svg"),
           src: "/shopcart"
         },
         {
           name: "我的",
-          img: require("@/assets/images/tabbar/profile.svg"),
-          aimg: require("@/assets/images/tabbar/profile_active.svg"),
+          img: require("@/assets/img/tabbar/profile.svg"),
+          aimg: require("@/assets/img/tabbar/profile_active.svg"),
           src: "/my"
         }
       ]

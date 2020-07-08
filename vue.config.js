@@ -10,6 +10,7 @@ module.exports = {
                 "network": "@/network",
                 "common": "@/common",//common指的是公共文件夹
             }
-        }
+        },
+        plugins:[]
     }
 }

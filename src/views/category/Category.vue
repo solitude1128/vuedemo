@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="category">
     <h2>分类</h2>
     <router-link v-for="(i,index) in arr" :key="index" :to="'/category/'+i">{{i}}</router-link>
     <keep-alive>

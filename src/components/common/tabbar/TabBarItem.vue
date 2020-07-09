@@ -6,9 +6,6 @@
     <div v-else>
       <slot name="item-icon-active">用来插入选中图片</slot>
     </div>
-    <div :class="{active:isActive}">
-      <slot name="item-text">用来插入名字</slot>
-    </div>
   </div>
 </template>
 

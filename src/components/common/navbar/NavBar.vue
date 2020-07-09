@@ -21,10 +21,8 @@ export default {
 <style lang="less" scoped>
 .navbar {
   display: flex;
-  height: 44px;
-  line-height: 44px;
+  line-height: 54px;
   text-align: center;
-  box-shadow: 0 1px 1px rgba(000, 000, 000, 0.5);
   .left,
   .right {
     width: 50px;

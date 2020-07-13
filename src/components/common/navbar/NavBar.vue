@@ -20,6 +20,10 @@ export default {
 
 <style lang="less" scoped>
 .navbar {
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  z-index:10;
   display: flex;
   line-height: 54px;
   text-align: center;

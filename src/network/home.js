@@ -1,7 +1,15 @@
-import {request} from './request'
+import { request } from './request'
 
-export function getHomeBanner(){
+export function getHomeBanner() {
     return request({
-        url:"/vuedemo/banner"
+        url: "/vuedemo/banner"
+    })
+}
+export function getHomeFeature() {
+    return request({
+        url: "/vuedemo/feature",
+        params: {
+            show: 1
+        }
     })
 }

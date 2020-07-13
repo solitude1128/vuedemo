@@ -51,7 +51,9 @@ export default {
             "https://img11.360buyimg.com/jdphoto/s130x100_jfs/t1/47480/36/12929/3209/5d9c4b13E97caa63a/4dc0ec8a7e47c2b7.png",
           src: "/my"
         }
-      ]
+      ],
+      path: "http://106.12.85.17:9091/",
+      bannerSrc: "public/image/banner/"
     };
   }
 };
@@ -65,7 +67,7 @@ export default {
   bottom: 0;
   left: 0;
   background-color: #fff;
-  border-top:1px solid rgb(200, 200, 200)
+  border-top: 1px solid rgb(200, 200, 200);
 }
 #tab-bar .tab-bar-item {
   flex: 1;

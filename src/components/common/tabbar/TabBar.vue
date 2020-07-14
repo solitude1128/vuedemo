@@ -9,3 +9,16 @@ export default {
   name: "TabBar"
 };
 </script>
+
+<style lang="less" scoped>
+#tab-bar {
+  display: flex;
+  width: 100%;
+  line-height: 50px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background-color: #fff;
+  border-top: 1px solid rgb(200, 200, 200);
+}
+</style>

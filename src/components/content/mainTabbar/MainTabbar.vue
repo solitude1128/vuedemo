@@ -36,6 +36,14 @@ export default {
           src: "/category"
         },
         {
+          name: "京喜",
+          img:
+            "https://img11.360buyimg.com/jdphoto/s130x100_jfs/t1/70651/38/12417/3194/5d9d3eafE12cde68b/2467c20113c50451.png",
+          aimg:
+            "//img12.360buyimg.com/img/s80x80_jfs/t1/110059/39/6854/5337/5e5393feE18b8d779/b70a8d50bac3834f.png.webp",
+          src: "/surprise"
+        },
+        {
           name: "购物车",
           img:
             "https://img11.360buyimg.com/jdphoto/s130x100_jfs/t1/64954/4/12406/3529/5d9c4b12Ee7a82735/f2fe0a88bf344736.png",
@@ -58,22 +66,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-#tab-bar {
-  display: flex;
-  width: 100%;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  background-color: #fff;
-  border-top: 1px solid rgb(200, 200, 200);
-}
-#tab-bar .tab-bar-item {
-  flex: 1;
-}
-#tab-bar .tab-bar-item img {
-  width: 68%;
-  vertical-align: middle;
-}
-</style>

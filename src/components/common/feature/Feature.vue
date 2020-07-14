@@ -9,11 +9,20 @@
     <!-- 放小圆点 索引指示器 -->
     <div class="indexIcator">
       <slot name="indexIcator">
-        <div
+        <!-- false -->
+        <!-- <div
           v-for="(item,index) in itemLen"
           :key="index"
           class="round-item"
           :class="{active:index === currentIndex}"
+          @click="indexIcatorClick(index)"
+        ></div>-->
+        <!-- true -->
+        <div
+          v-for="(item,index) in itemLen"
+          :key="index"
+          class="round-item"
+          :class="{active:index === currentIndex-1}"
           @click="indexIcatorClick(index)"
         ></div>
       </slot>
@@ -28,10 +37,6 @@ export default {
     id: {
       type: String,
       default: "featureBox"
-    },
-    showIndexIcator: {
-      type: Boolean,
-      default: true
     },
     showIcator: {
       type: Boolean,
@@ -52,6 +57,7 @@ export default {
       default: 0.3 //移动基数
     },
     iscopy: {
+      //是否允许拷贝
       type: Boolean,
       default: false
     }
@@ -74,17 +80,30 @@ export default {
     }, 500);
   },
   methods: {
+    indexIcatorClick(index) {
+      this.currentIndex = index + 1; //true对了
+      // this.currentIndex = index; //false对了
+      this.setTransfrom(-this.currentIndex * this.totalWidth);
+    },
     handleDom() {
       let divEl = document.querySelector(`#${this.id}`);
       divEl.style.position = "relative";
       divEl.style.overflow = "hidden";
       let feaEl = divEl.querySelector(`.feature`);
       let itemEls = feaEl.querySelectorAll(".item");
+      // 根据传递的参数,判断是否需要复制子对象
+      if (this.iscopy && itemEls.length > 1) {
+        let cloneFirst = itemEls[0].cloneNode(true);
+        let cloneLast = itemEls[itemEls.length - 1].cloneNode(true);
+        feaEl.appendChild(cloneFirst);
+        feaEl.insertBefore(cloneLast, itemEls[0]);
+        this.currentIndex = 1;
+      }
+      console.log(this.currentIndex);
       this.itemLen = itemEls.length;
       this.totalWidth = feaEl.offsetWidth;
       this.feaStyle = feaEl.style;
-      this.feaStyle.transition = `transform ${this.animateDuration}ms`;
-      this.setTransfrom(0);
+      this.setTransfrom(-this.currentIndex * this.totalWidth);
     },
     setTransfrom(position) {
       this.feaStyle.transform = `translateX(${position}px)`;
@@ -94,8 +113,25 @@ export default {
     // 移动正确位置
     scrollPosition(cp) {
       this.touch = true;
+      this.feaStyle.transition = `transform ${this.animateDuration}ms`;
       this.setTransfrom(cp);
+      if (this.iscopy) this.checkPosition();
       this.touch = false;
+    },
+    // 判断当前图片的位置(校正位置)
+    checkPosition() {
+      setTimeout(() => {
+        // 把动画时间设置为0,瞬间转换图片
+        this.feaStyle.transition = "0ms";
+        if (this.currentIndex >= this.itemLen + 1) {
+          this.currentIndex = 1;
+          this.setTransfrom(-this.currentIndex * this.totalWidth);
+        } else if (this.currentIndex <= 0) {
+          // 左右滑动时会用到这里
+          this.currentIndex = this.itemLen;
+          this.setTransfrom(-this.currentIndex * this.totalWidth);
+        }
+      }, this.animateDuration);
     },
     touchStart(e) {
       if (this.touch) return;
@@ -135,27 +171,25 @@ export default {
         ) {
           this.currentIndex++;
         }
+        this.scrollPosition(-this.currentIndex * this.totalWidth);
       } else {
         if (this.distance == 0) {
           return;
         } else if (
           this.distance > 0 &&
           currentMove > this.totalWidth * this.moveBase &&
-          this.currentIndex == this.itemLen - 1
+          this.currentIndex != 0
         ) {
           this.currentIndex--;
         } else if (
           this.distance < 0 &&
           currentMove > this.totalWidth * this.moveBase &&
-          this.currentIndex == 0
+          this.currentIndex != this.itemLen - 1
         ) {
+          // 如果向左移动 && 移动基数 > 设定值 && 不是最后一个盒子
           this.currentIndex++;
         }
       }
-      this.setTransfrom(-this.currentIndex * this.totalWidth);
-    },
-    indexIcatorClick(index) {
-      this.currentIndex = index;
       this.setTransfrom(-this.currentIndex * this.totalWidth);
     }
   }

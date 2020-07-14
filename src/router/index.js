@@ -20,26 +20,16 @@ const routes = [
         path: "/category",
         name: "category",
         component: () => import("@/views/category/Category"),
-        children: [
-            {//子路由定义时 path路径中不需要写'/'
-                path: "phone",
-                name: "phone",
-                component: () => import("@/views/category/phone"),
-            },
-            {
-                path: "idol",
-                name: "idol",
-                component: () => import("@/views/category/idol"),
-            },
-            {
-                path: "default",
-                component: () => {
-                    return import("@/views/category/phone")
-                }
-            }
-        ],
         meta: {
             title: "category"
+        },
+    },
+    {
+        path: "/surprise",
+        name: "surprise",
+        component: () => import("@/views/surprise/Surprise"),
+        meta: {
+            title: "surprise"
         },
     },
     {

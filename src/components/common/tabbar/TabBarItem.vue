@@ -30,3 +30,13 @@ export default {
   }
 };
 </script>
+
+<style lang="less" scoped>
+#tab-bar .tab-bar-item {
+  flex: 1;
+  img {
+    width: 80%;
+    vertical-align: middle;
+  }
+}
+</style>

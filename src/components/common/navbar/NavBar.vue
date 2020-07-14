@@ -1,13 +1,13 @@
 <template>
   <div class="navbar">
     <div class="left">
-      <slot name="left">1</slot>
+      <slot name="left"></slot>
     </div>
     <div class="center">
-      <slot name="center">2</slot>
+      <slot name="center"></slot>
     </div>
     <div class="right">
-      <slot name="right">3</slot>
+      <slot name="right"></slot>
     </div>
   </div>
 </template>
@@ -25,7 +25,7 @@ export default {
   top: 0;
   z-index:10;
   display: flex;
-  line-height: 54px;
+  line-height: 50px;
   text-align: center;
   .left,
   .right {

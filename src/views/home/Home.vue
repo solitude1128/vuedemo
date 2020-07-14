@@ -8,7 +8,7 @@
       <div slot="center">
         <div class="demo-input-suffix">
           <i class="jd"></i>
-          <el-input type="search" placeholder="衣服" prefix-icon="el-icon-search"></el-input>
+          <el-input type="search" placeholder="衣服" prefix-icon="el-icon-search" v-model="input"></el-input>
         </div>
       </div>
       <div slot="right">
@@ -36,7 +36,8 @@ export default {
   data() {
     return {
       banners: [],
-      feaArr: []
+      feaArr: [],
+      input: ""
     };
   },
   components: {

@@ -12,7 +12,7 @@
 import Rotation from "components/common/rotation/Rotation";
 import RotationItem from "components/common/rotation/RotationItem";
 export default {
-  name: "homeRotation",
+  name: "jxRotation",
   components: {
     Rotation,
     RotationItem
@@ -27,7 +27,7 @@ export default {
   },
   data() {
     return {
-      path: "http://106.12.85.17:8090/",
+      path: "http://106.12.85.17:9091/",
       bannerSrc: "public/image/banner/"
     };
   }

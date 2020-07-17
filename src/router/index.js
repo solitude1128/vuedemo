@@ -48,6 +48,15 @@ const routes = [
             title: "my"
         },
     },
+    {
+        path: "/search/:id",
+        name: "search",
+        component: () => import("@/views/search/Search"),
+        meta: {
+            title: "search"
+        },
+        props: true
+    },
 ]
 
 // 3.创建一个vue-router实例

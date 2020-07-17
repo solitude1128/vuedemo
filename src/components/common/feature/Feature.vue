@@ -3,28 +3,25 @@
     <div class="feature" @touchstart="touchStart" @touchend="touchEnd" @touchmove="touchMove">
       <slot></slot>
     </div>
-    <div class="icator" v-if="showIcator">
-      <slot name="icator"></slot>
-    </div>
     <!-- 放小圆点 索引指示器 -->
     <div class="indexIcator">
       <slot name="indexIcator">
         <!-- false -->
-        <!-- <div
+        <div
           v-for="(item,index) in itemLen"
           :key="index"
           class="round-item"
-          :class="{active:index === currentIndex}"
+          :class="{active:index === icatorIndex}"
           @click="indexIcatorClick(index)"
-        ></div>-->
+        ></div>
         <!-- true -->
-        <div
+        <!-- <div
           v-for="(item,index) in itemLen"
           :key="index"
           class="round-item"
           :class="{active:index === currentIndex-1}"
           @click="indexIcatorClick(index)"
-        ></div>
+        ></div>-->
       </slot>
     </div>
   </div>
@@ -71,7 +68,8 @@ export default {
       touch: false,
       startX: 0, //拖拽的起始坐标点
       currentX: 0, //记录移动后的坐标点
-      distance: 0 //记录两点的距离
+      distance: 0, //记录两点的距离
+      icatorIndex: 0
     };
   },
   mounted() {
@@ -80,11 +78,11 @@ export default {
     }, 500);
   },
   methods: {
-    indexIcatorClick(index) {
-      this.currentIndex = index + 1; //true对了
-      // this.currentIndex = index; //false对了
-      this.setTransfrom(-this.currentIndex * this.totalWidth);
-    },
+    // indexIcatorClick(index) {
+    //   this.currentIndex = index + 1; //true对了
+    //   // this.currentIndex = index; //false对了
+    //   this.setTransfrom(-this.currentIndex * this.totalWidth);
+    // },
     handleDom() {
       let divEl = document.querySelector(`#${this.id}`);
       divEl.style.position = "relative";
@@ -125,9 +123,11 @@ export default {
         this.feaStyle.transition = "0ms";
         if (this.currentIndex >= this.itemLen + 1) {
           this.currentIndex = 1;
+          // this.icatorIndex = 0;
           this.setTransfrom(-this.currentIndex * this.totalWidth);
         } else if (this.currentIndex <= 0) {
           // 左右滑动时会用到这里
+          this.icatorIndex = 1;
           this.currentIndex = this.itemLen;
           this.setTransfrom(-this.currentIndex * this.totalWidth);
         }
@@ -165,11 +165,20 @@ export default {
           currentMove > this.totalWidth * this.moveBase
         ) {
           this.currentIndex--;
+          this.currentIndex <= 0 ? (this.icatorIndex = 1) : this.icatorIndex--;
         } else if (
           this.distance < 0 &&
           currentMove > this.totalWidth * this.moveBase
         ) {
           this.currentIndex++;
+          this.currentIndex >= this.itemLen + 1
+            ? (this.icatorIndex = 0)
+            : this.icatorIndex++;
+          // this.icatorIndex =
+          //   this.currentIndex >= this.itemLen + 1 ? 0 : this.icatorIndex++;
+          // console.log(
+          //   this.currentIndex >= this.itemLen + 1 ? 0 : this.icatorIndex++
+          // );
         }
         this.scrollPosition(-this.currentIndex * this.totalWidth);
       } else {

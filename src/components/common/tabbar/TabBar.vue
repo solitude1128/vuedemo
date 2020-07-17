@@ -17,7 +17,6 @@ export default {
   line-height: 50px;
   position: fixed;
   bottom: 0;
-  left: 0;
   background-color: #fff;
   border-top: 1px solid rgb(200, 200, 200);
 }

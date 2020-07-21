@@ -15,6 +15,7 @@ export function request(config) {
     instance.interceptors.response.use(res => {
         let loadingInstance = Loading.service();
         loadingInstance.close();
+        // console.log(res.data)
         return res.data
     }, err => {
         console.log(err)

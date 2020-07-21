@@ -6,7 +6,6 @@
     <!-- 放小圆点 索引指示器 -->
     <div class="indexIcator">
       <slot name="indexIcator">
-        <!-- false -->
         <div
           v-for="(item,index) in itemLen"
           :key="index"
@@ -14,14 +13,6 @@
           :class="{active:index === icatorIndex}"
           @click="indexIcatorClick(index)"
         ></div>
-        <!-- true -->
-        <!-- <div
-          v-for="(item,index) in itemLen"
-          :key="index"
-          class="round-item"
-          :class="{active:index === currentIndex-1}"
-          @click="indexIcatorClick(index)"
-        ></div>-->
       </slot>
     </div>
   </div>
@@ -78,11 +69,11 @@ export default {
     }, 500);
   },
   methods: {
-    // indexIcatorClick(index) {
-    //   this.currentIndex = index + 1; //true对了
-    //   // this.currentIndex = index; //false对了
-    //   this.setTransfrom(-this.currentIndex * this.totalWidth);
-    // },
+    indexIcatorClick(index) {
+      this.icatorIndex = index;
+      this.currentIndex = index + 1;
+      this.setTransfrom(-this.currentIndex * this.totalWidth);
+    },
     handleDom() {
       let divEl = document.querySelector(`#${this.id}`);
       divEl.style.position = "relative";

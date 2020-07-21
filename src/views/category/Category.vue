@@ -2,41 +2,62 @@
   <div id="category">
     <!-- 导航 -->
     <nav-bar class="cg-nav-bar">
-      <div slot="left">
+      <div slot="left" @click="$router.go(-1)">
         <i class="el-icon-arrow-left"></i>
       </div>
       <div slot="center">
-        <el-input placeholder="电子琴" prefix-icon="el-icon-search" v-model="input"></el-input>
+        <el-input
+          placeholder="电子琴"
+          prefix-icon="el-icon-search"
+          v-model="input"
+          v-on:focus="toSearch"
+        ></el-input>
       </div>
       <div slot="right">
         <i class="el-icon-more"></i>
       </div>
     </nav-bar>
-    <div class="one">
-      <tab-control controlId="categoryControl" :titleArr="oneData" ref="categoryControl">
+    <scroll class="one" ref="one">
+      <tab-control
+        controlId="categoryControl"
+        :titleArr="oneData"
+        ref="categoryControl"
+        @tabClick="tcClick"
+      >
         <div @click="tcClick(0)" :class="{active:oneIndex == 0}">
           <span>热门推荐</span>
         </div>
       </tab-control>
-    </div>
+    </scroll>
 
-    <div class="two">
+    <scroll class="two" ref="two" @parentScroll="contentScroll">
       <div v-if="oneIndex===0">
         <dl v-if="historyData.length">
           <dt>
-            <h3>
-              浏览足迹
-              <el-button type="text" @click="rmHistory">清空</el-button>
-            </h3>
+            <span class="left">浏览足迹</span>
+            <el-button class="right" type="text" @click="rmHistory">
+              <span class="el-icon-delete"></span>
+              清空
+            </el-button>
           </dt>
-          <dd></dd>
+          <dd>
+            <a v-for="(i,key) in historyData" :key="key" @click="saveData(i)">
+              <img :src="categorySrc+i.c3_img" width="50%" />
+              <p>{{i.c3_name}}</p>
+            </a>
+          </dd>
         </dl>
         <dl>
           <dt>
-            <h3>热门分类</h3>
+            <span class="left">热门分类</span>
+            <router-link class="right" to="/category/rl" tag="span">
+              <span class="el-icon-s-data" style="color:red"></span>
+              <span>&nbsp;排行榜</span>
+              <span class="el-icon-arrow-right"></span>
+            </router-link>
           </dt>
           <dd>
-            <a href v-for="(i,key) in secMenuList" :key="key">
+            <a v-for="(i,key) in secMenuList" :key="key" @click="saveData(i)">
               <img :src="categorySrc+i.c3_img" width="50%" />
               <p>{{i.c3_name}}</p>
             </a>
@@ -45,21 +66,20 @@
       </div>
       <div v-if="oneIndex!=0">
         <dl v-for="(item,index) in secMenuList" :key="index">
-          <dt>
-            <h3>{{index}}</h3>
-          </dt>
+          <dt>{{index}}</dt>
           <dd>
-            <a :href="'/search/'+i.c3_id" v-for="(i,key) in item" :key="key" @click="saveHistoryData(i)">
+            <a v-for="(i,key) in item" :key="key" @click="saveData(i)">
               <img :src="categorySrc+i.c3_img" width="50%" />
               <p>{{i.c3_name}}</p>
             </a>
           </dd>
         </dl>
       </div>
-    </div>
+    </scroll>
   </div>
 </template>
 <script>
+import Scroll from "components/content/scroll/Scroll";
 import TabControl from "components/content/tabControl/TabControl";
 import navBar from "components/common/navbar/NavBar";
 import * as base from "network/jd_category";
@@ -67,7 +87,8 @@ export default {
   name: "category",
   components: {
     navBar,
-    TabControl
+    TabControl,
+    Scroll
   },
   data() {
     return {
@@ -78,19 +99,22 @@ export default {
       threeData: [],
       oneIndex: 0,
       secMenuList: null, //可能是数组,也可能是对象
-      historyData: [] //已经浏览的记录,在发生页面跳转后,在路由守卫中记录当前请求的数据,并在页面跳转前,存储到historyData中(把整个)
+      historyData: [],
+      num: 0 //已经浏览的记录,在发生页面跳转后,在路由守卫中记录当前请求的数据,并在页面跳转前,存储到historyData中(把整个)
     };
   },
   created() {
     this.getJdCategoryOne();
     this.getJdCategoryTwo();
     this.getJdCategoryThree();
+    this.historyData =
+      JSON.parse(localStorage.historyData).length > 0
+        ? JSON.parse(localStorage.historyData)
+        : [];
   },
-  beforeRouteLeave(to, from, next) {
-    console.log("组件离开守卫导航被触发");
-    console.log(this.$route.path);
-    next();
-  },
+  // beforeRouteLeave(to, from, next) {
+  //   console.log("组件离开守卫导航被触发");
+  // },
   methods: {
     // 定义网页相关事件
     tcClick(index) {
@@ -99,7 +123,7 @@ export default {
       // 回传数据给子组件 / 修改子组件的数据
       // ref = categoryControl 的组件的值
       this.$refs.categoryControl.itemIndex = index;
-
+      console.log(index);
       if (index === 0) {
         this.secMenuList = [];
         // 循环遍历表3,取出ishot=1的值存到secMenuList中
@@ -125,7 +149,6 @@ export default {
             });
           }
         });
-        console.log(this.secMenuList);
       }
     },
     rmHistory() {
@@ -137,6 +160,7 @@ export default {
       })
         .then(() => {
           that.historyData = [];
+          localStorage.removeItem("historyData");
           this.$message({
             type: "success",
             message: "删除成功!"
@@ -149,8 +173,8 @@ export default {
           });
         });
     },
-    saveHistoryData(a) {
-      console.log(a);
+    contentScroll(position) {
+      console.log("contentScroll被使用", position);
     },
     //网络请求
     getJdCategoryOne() {
@@ -168,6 +192,31 @@ export default {
         this.threeData = res;
         this.tcClick(this.oneIndex);
       });
+    },
+    saveData(a) {
+      if (localStorage.historyData) {
+        let obj = JSON.parse(localStorage.historyData);
+        for (var i in obj) {
+          if (a.c3_id == obj[i].c3_id) {
+            obj.splice(i, 1);
+          }
+        }
+        this.historyData = [];
+        obj.unshift(a);
+        for (var j in obj) {
+          if (j <= 5) {
+            this.historyData.push(obj[j]);
+          }
+        }
+      } else {
+        this.historyData = [a];
+      }
+      console.log(this.historyData);
+      localStorage.historyData = JSON.stringify(this.historyData);
+      this.$router.push("/category/details/" + a.c3_id);
+    },
+    toSearch() {
+      this.$router.push("/search");
     }
   }
 };
@@ -177,7 +226,9 @@ export default {
 #category {
   display: flex;
   font-size: 12px;
-  padding: 42px 0 50px 0;
+  padding-top: 42px;
+  height: calc(100vh - 92px);
+  overflow: hidden;
   .one {
     flex: 1;
     .active {
@@ -190,19 +241,33 @@ export default {
     background-color: #fff;
     padding: 0 10px;
     margin-left: 2px;
-    dt h3 {
-      width: 100%;
-      text-align: left;
-      color: #666;
-    }
-    dd {
-      display: flex;
+    dl {
       margin: 0;
-      flex-wrap: wrap;
-      a {
-        width: 33%;
-        text-decoration: none;
+      dt {
+        height: 40px;
+        line-height: 40px;
+        font-size: 14px;
+        text-align: left;
         color: #666;
+        font-weight: bold;
+        .left {
+          float: left;
+        }
+        .right {
+          font-size: 12px;
+          float: right;
+          color: rgb(126, 126, 126);
+        }
+      }
+      dd {
+        display: flex;
+        margin: 0;
+        flex-wrap: wrap;
+        a {
+          width: 33%;
+          text-decoration: none;
+          color: #666;
+        }
       }
     }
   }

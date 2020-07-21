@@ -47,9 +47,9 @@ export default {
     itemClick(index) {
       //  在子组件中如果想使用父组件传递过来的事件,需要通过使用$emit
       //   这里要是使用$emit写,使用的组件上需要写@tabClick="函数名"
-      //   this.$emit("tabClick", index);
+      this.$emit("tabClick", index);
       // $parent 直接使用父组件的事件(只能找到上一个父元素)
-      this.$parent.tcClick(index);
+      // this.$parent.tcClick(index);
       this.itemIndex = index;
     }
   }

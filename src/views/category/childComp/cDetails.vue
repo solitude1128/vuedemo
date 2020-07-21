@@ -1,17 +1,12 @@
 <template>
-  <div id="search">我是搜索啊啊啊</div>
+  <div id="cDetails">我是详情页</div>
 </template>
 
 <script>
 export default {
-  name: "search",
+  name: "cDetails",
   data() {
     return {};
-  },
-  props: {
-    id: {
-      type: Number
-    }
   },
   components: {},
   computed: {},
@@ -21,4 +16,7 @@ export default {
 };
 </script>
 <style lang='less' scoped>
+#cDetails {
+  background-color: red;
+}
 </style>

@@ -17,6 +17,7 @@
     "@vue/cli-service": "~4.4.0",
     "axios": "^0.19.2",
     "babel-eslint": "^10.1.0",
+    "better-scroll": "^1.15.2",
     "body-parser": "^1.19.0",
     "element-ui": "^2.13.2",
     "eslint": "^6.7.2",
@@ -51,5 +52,9 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "main": "index.js",
+  "repository": "https://github.com/solitude1128/vuedemo.git",
+  "author": "solitude1128 <198912004@qq.com>",
+  "license": "MIT"
 }

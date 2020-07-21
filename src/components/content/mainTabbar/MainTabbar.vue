@@ -8,8 +8,9 @@
 </template>
 
 <script>
-import tabBar from "@/components/common/tabbar/TabBar";
-import tabBarItem from "@/components/common/tabbar/TabBarItem";
+import * as base from "network/mainTabbar";
+import tabBar from "components/common/tabbar/TabBar";
+import tabBarItem from "components/common/tabbar/TabBarItem";
 export default {
   name: "MainTabbar",
   components: {
@@ -63,6 +64,16 @@ export default {
       path: "http://106.12.85.17:9091/",
       bannerSrc: "public/image/banner/"
     };
+  },
+  mounted() {
+    this.getTabbar();
+  },
+  methods: {
+    getTabbar() {
+      base.getTabBar().then(res => {
+        console.log(res);
+      });
+    }
   }
 };
 </script>

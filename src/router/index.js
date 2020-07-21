@@ -11,7 +11,7 @@ const routes = [
     {
         path: "/home",
         name: "home",
-        component: () => import("@/views/home/Home"),
+        component: () => import("views/home/Home"),
         meta: {
             title: "home"
         },
@@ -19,15 +19,39 @@ const routes = [
     {
         path: "/category",
         name: "category",
-        component: () => import("@/views/category/Category"),
+        component: () => import("views/category/Category"),
         meta: {
             title: "category"
+        }
+    },
+    {
+        path: "/category/rl",
+        name: "rankList",
+        component: () => import("views/category/childComp/cRankList"),
+        meta: {
+            title: "rankList"
         },
+    },
+    {
+        path: "/category/details/:id",
+        name: "cDetails",
+        component: () => import("views/category/childComp/cDetails"),
+        meta: {
+            title: "详情"
+        },
+    },
+    {
+        path: "/search",
+        name: "search",
+        component: () => import("components/content/search/Search"),
+        meta: {
+            title: "search"
+        }
     },
     {
         path: "/surprise",
         name: "surprise",
-        component: () => import("@/views/surprise/Surprise"),
+        component: () => import("views/surprise/Surprise"),
         meta: {
             title: "surprise"
         },
@@ -35,7 +59,7 @@ const routes = [
     {
         path: "/shopcart",
         name: "shopcart",
-        component: () => import("@/views/cat/Shopcart"),
+        component: () => import("views/cat/Shopcart"),
         meta: {
             title: "shopcart"
         },
@@ -43,19 +67,10 @@ const routes = [
     {
         path: "/my",
         name: "my",
-        component: () => import("@/views/profile/Profile"),
+        component: () => import("views/profile/Profile"),
         meta: {
             title: "my"
         },
-    },
-    {
-        path: "/search/:id",
-        name: "search",
-        component: () => import("@/views/search/Search"),
-        meta: {
-            title: "search"
-        },
-        props: true
     },
 ]
 
@@ -65,6 +80,7 @@ const routers = new VueRouter({
     linkActiveClass: "active"
 })
 routers.beforeEach((to, from, next) => {
+    console.log(to)
     document.title = to.matched[0].meta.title
     next()
 })

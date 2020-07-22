@@ -1,6 +1,6 @@
 <template>
   <!-- 用于关联feature组件 -->
-  <feature :iscopy="iscopy">
+  <feature :iscopy="false">
     <feature-item v-for="(item,index) in cFea" :key="index">
       <li v-for="(i,j) in item" :key="j">
         <a :href="i.imgHref">
@@ -30,8 +30,7 @@ export default {
   data() {
     return {
       path: "http://106.12.85.17:8090/",
-      featureSrc: "public/image/feature/",
-      iscopy: true
+      featureSrc: "public/image/feature/"
     };
   }
 };

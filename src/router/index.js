@@ -49,6 +49,14 @@ const routes = [
         }
     },
     {
+        path: "/login",
+        name: "login",
+        component: () => import("components/content/login/Login"),
+        meta: {
+            title: "login"
+        }
+    },
+    {
         path: "/surprise",
         name: "surprise",
         component: () => import("views/surprise/Surprise"),

@@ -14,7 +14,10 @@
         ></el-input>
       </div>
       <div slot="right">
-        <i class="el-icon-user"></i>
+        <router-link to="/login" tag="span">
+          <span>登录</span>
+          <!-- <i class="el-icon-user"></i> -->
+        </router-link>
       </div>
     </nav-bar>
     <scroll
@@ -27,14 +30,23 @@
     >
       <!-- 导航背景 -->
       <div class="navbg"></div>
+
       <!-- 主页轮播 -->
       <home-rotation :cbanners="banners"></home-rotation>
+
       <!-- 功能视图 -->
       <home-feature :cFea="feaArr"></home-feature>
+
       <!-- 商品展示 -->
-      <home-tab-content :goods="goods" :tabType="tabCurrentType"></home-tab-content>
+      <button @click="changeDirection">改变商品数据排列</button>
+      <div class="goodsTitle" v-for="(i,key) in goods" :key="key">
+        <h2>{{key}}</h2>
+      </div>
+      <goods-list :cgoods="showGoodsList" :isDirection="direction"></goods-list>
     </scroll>
-    <span @click="toTop" class="toTop" v-if="isShowBackTop">返回顶部</span>
+    <span @click="toTop" class="toTop" v-if="isShowBackTop">
+      <span class="el-icon-upload2"></span>
+    </span>
   </div>
 </template>
 <script>
@@ -42,10 +54,10 @@
 import navBar from "components/common/navbar/NavBar";
 // 引入公共组件中跟项目
 import Scroll from "components/content/scroll/Scroll";
+import goodsList from "components/content/goods/GoodsList";
 // 引入当前组件的子组件
 import homeRotation from "./childComp/homeRotation";
 import homeFeature from "./childComp/homeFeature";
-import homeTabContent from "./childComp/homeTabContent";
 // 引入其他文件
 import * as base from "network/home";
 
@@ -61,25 +73,33 @@ export default {
       goods: {
         recommend: {
           page: 0,
+          list: [],
+          img:
+            "https://img11.360buyimg.com/jdphoto/jfs/t1/31601/22/15554/14040/5cc2a86fEbdb1098b/88174b36f85283b6.png"
+        },
+        news: {
+          page: 10,
           list: []
         }
       },
-      tabCurrentType: "recommend"
+      tabCurrentType: "recommend",
+      direction: true,
+      isLoadmore: true
     };
   },
   components: {
     navBar,
     Scroll,
+    goodsList,
     homeRotation,
-    homeFeature,
-    homeTabContent
+    homeFeature
   },
   created() {
     // 获取主页轮播数据
     this.getHomeBanner();
     // 获取功能视图数据
     this.getHomeFeature();
-    this.getGoodsMax("recommend");
+    this.getGoodsMax(this.tabCurrentType);
   },
   methods: {
     // 获取轮播图片
@@ -107,7 +127,13 @@ export default {
         this.goods[type].page += 1;
         this.goods[type].list.push(...res);
         this.$refs.scrollCom.scroll.finishPullUp();
+        this.isLoadmore = true;
       });
+    },
+    loadMore() {
+      if (!this.isLoadmore) return;
+      this.isLoadmore = false;
+      this.getGoodsMax(this.tabCurrentType);
     },
     homeScroll(position) {
       this.isShowBackTop = -position.y > 1000;
@@ -118,17 +144,19 @@ export default {
     toTop() {
       this.$refs.scrollCom.scrollTo(0, 0, 300);
     },
-    loadMore() {
-      this.getGoodsMax(this.tabCurrentType);
-    },
     tabClick(type) {
       this.tabCurrentType = type;
-      if ((!this.goods[type].list, length)) {
-        this.getGoodsMax(type);
-      }
     },
     toSearch() {
       this.$router.push("/search");
+    },
+    changeDirection() {
+      this.direction = !this.direction;
+    }
+  },
+  computed: {
+    showGoodsList() {
+      return this.goods[this.tabCurrentType].list;
     }
   }
 };
@@ -155,13 +183,23 @@ export default {
       border-bottom-right-radius: 100%;
       z-index: -1;
     }
+    .goodsTitle {
+      display: flex;
+      h2 {
+        flex: 1;
+        margin: 0;
+      }
+    }
   }
   .toTop {
     position: absolute;
-    bottom: 10%;
-    right: 1%;
-    background-color: red;
-    padding: 5px;
+    bottom: 13%;
+    right: 2%;
+    background-color: rgb(235, 235, 235);
+    padding: 6px 8px;
+    border-radius: 50px;
+    font-size: 20px;
+    border: 1px solid rgb(114, 114, 114);
   }
 }
 </style>

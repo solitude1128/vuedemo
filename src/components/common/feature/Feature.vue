@@ -69,11 +69,11 @@ export default {
     }, 500);
   },
   methods: {
-    indexIcatorClick(index) {
-      this.icatorIndex = index;
-      this.currentIndex = index + 1;
-      this.setTransfrom(-this.currentIndex * this.totalWidth);
-    },
+    // indexIcatorClick(index) {
+    //   this.icatorIndex = index;
+    //   this.currentIndex = index + 1;
+    //   this.setTransfrom(-this.currentIndex * this.totalWidth);
+    // },
     handleDom() {
       let divEl = document.querySelector(`#${this.id}`);
       divEl.style.position = "relative";
@@ -181,6 +181,7 @@ export default {
           this.currentIndex != 0
         ) {
           this.currentIndex--;
+          this.icatorIndex--;
         } else if (
           this.distance < 0 &&
           currentMove > this.totalWidth * this.moveBase &&
@@ -188,6 +189,7 @@ export default {
         ) {
           // 如果向左移动 && 移动基数 > 设定值 && 不是最后一个盒子
           this.currentIndex++;
+          this.icatorIndex++;
         }
       }
       this.setTransfrom(-this.currentIndex * this.totalWidth);

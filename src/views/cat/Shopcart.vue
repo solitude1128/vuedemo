@@ -7,9 +7,21 @@
       </div>
       <div slot="center">购物车</div>
       <div slot="right">
-        <i class="el-icon-more"></i>
+        <el-dropdown trigger="click" @command="pushRouter">
+          <span class="el-dropdown-link">
+            <i class="el-icon-more"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="/home" icon="el-icon-s-home">首页</el-dropdown-item>
+            <el-dropdown-item command="/category" divided icon="el-icon-s-home">分类搜索</el-dropdown-item>
+            <el-dropdown-item command="/shopCar" divided icon="el-icon-s-home">购物车</el-dropdown-item>
+            <el-dropdown-item command="/my" divided icon="el-icon-s-home">我的京东</el-dropdown-item>
+            <el-dropdown-item command="/category" divided icon="el-icon-s-home">浏览记录</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </div>
     </nav-bar>
+
     <!-- 空购物车 -->
     <div class="scNull">
       <el-image
@@ -24,10 +36,15 @@
 <script>
 import navBar from "components/common/navbar/NavBar";
 export default {
-  name: "shopcart",
+  name: "Shopcart",
   components: {
-    navBar
-  }
+    navBar,
+  },
+  methods: {
+    pushRouter(path) {
+      this.$router.push(path);
+    },
+  },
 };
 </script>
 

@@ -51,25 +51,29 @@
 <script>
 import navBar from "components/common/navbar/NavBar";
 export default {
-  name: "login",
+  name: "Login",
   data() {
     return {
       region: "+86",
       phone: "",
-      code: ""
+      code: "",
     };
   },
   components: {
-    navBar
+    navBar,
   },
   computed: {},
   created() {},
+  activated() {
+    this.$root.$children[0].isShowMT = false;
+    this.$root.$children[0].isShowJT = false;
+  },
   mounted() {},
   methods: {
     changeRegion() {
       alert("aaa");
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang='less' scoped>

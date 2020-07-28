@@ -1,33 +1,67 @@
-@import './normalize.css';
+@import 'normalize.css';
 
 body {
-    text-align      : center;
-    background-color: #f6f6f6;
-    margin          : 0 auto;
-    color           : #666;
-    font-size       : 14px;
+  text-align      : center;
+  background-color: #f6f6f6;
+  margin          : 0 auto;
+  color           : #666;
+  font-size       : 14px;
 }
 
 ul {
-    padding: 0;
+  padding: 0;
 }
 
 li {
-    list-style: none;
-    margin    : 0;
+  list-style: none;
+  margin    : 0;
+}
+
+#home,
+#surprise,
+#details {
+  position: relative;
+  height  : 100vh;
+  overflow: hidden;
 }
 
 #profile,
 #shopcart {
-    height     : 100vh;
-    overflow   : hidden;
-    padding-top: 50px;
+  height     : 100vh;
+  overflow   : hidden;
+  padding-top: 50px;
+}
+
+.navbg {
+  position                  : fixed;
+  top                       : 0;
+  left                      : -25%;
+  height                    : 20vh;
+  width                     : 150%;
+  border-bottom-left-radius : 100%;
+  border-bottom-right-radius: 100%;
+  z-index                   : -1;
+}
+
+.circle {
+  position        : absolute;
+  bottom          : 11%;
+  right           : 2%;
+  background-color: #ebebeb;
+  padding         : 6px 8px;
+  border-radius   : 50px;
+  font-size       : 20px;
+  border          : 1px solid #727272;
+}
+
+.toTop {
+  bottom: 18%;
 }
 
 .left {
-    float: left;
+  float: left;
 }
 
 .right {
-    float: right;
+  float: right;
 }

@@ -4,14 +4,13 @@
       <slot></slot>
     </div>
     <!-- 放小圆点 索引指示器 -->
-    <div class="indexIcator">
+    <div class="indexIcator" v-if="feature.length > 1">
       <slot name="indexIcator">
         <div
           v-for="(item,index) in itemLen"
           :key="index"
           class="round-item"
           :class="{active:index === icatorIndex}"
-          @click="indexIcatorClick(index)"
         ></div>
       </slot>
     </div>
@@ -24,31 +23,31 @@ export default {
   props: {
     id: {
       type: String,
-      default: "featureBox"
+      default: "featureBox",
     },
     showIcator: {
       type: Boolean,
-      default: true
+      default: true,
     },
     feature: {
       type: Array,
       default() {
         return [];
-      }
+      },
     },
     animateDuration: {
       type: Number,
-      default: 300 //移动基数
+      default: 300, //移动基数
     },
     moveBase: {
       type: Number,
-      default: 0.3 //移动基数
+      default: 0.3, //移动基数
     },
     iscopy: {
       //是否允许拷贝
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -60,7 +59,7 @@ export default {
       startX: 0, //拖拽的起始坐标点
       currentX: 0, //记录移动后的坐标点
       distance: 0, //记录两点的距离
-      icatorIndex: 0
+      icatorIndex: 0,
     };
   },
   mounted() {
@@ -69,11 +68,6 @@ export default {
     }, 500);
   },
   methods: {
-    // indexIcatorClick(index) {
-    //   this.icatorIndex = index;
-    //   this.currentIndex = index + 1;
-    //   this.setTransfrom(-this.currentIndex * this.totalWidth);
-    // },
     handleDom() {
       let divEl = document.querySelector(`#${this.id}`);
       divEl.style.position = "relative";
@@ -88,7 +82,6 @@ export default {
         feaEl.insertBefore(cloneLast, itemEls[0]);
         this.currentIndex = 1;
       }
-      console.log(this.currentIndex);
       this.itemLen = itemEls.length;
       this.totalWidth = feaEl.offsetWidth;
       this.feaStyle = feaEl.style;
@@ -165,11 +158,6 @@ export default {
           this.currentIndex >= this.itemLen + 1
             ? (this.icatorIndex = 0)
             : this.icatorIndex++;
-          // this.icatorIndex =
-          //   this.currentIndex >= this.itemLen + 1 ? 0 : this.icatorIndex++;
-          // console.log(
-          //   this.currentIndex >= this.itemLen + 1 ? 0 : this.icatorIndex++
-          // );
         }
         this.scrollPosition(-this.currentIndex * this.totalWidth);
       } else {
@@ -193,8 +181,8 @@ export default {
         }
       }
       this.setTransfrom(-this.currentIndex * this.totalWidth);
-    }
-  }
+    },
+  },
 };
 </script>
 

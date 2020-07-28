@@ -1,10 +1,10 @@
 <template>
-  <div id="cDetails">我是详情页</div>
+  <div id="live">直播啊啊啊啊啊啊啊</div>
 </template>
 
 <script>
 export default {
-  name: "cDetails",
+  name: "Live",
   data() {
     return {};
   },
@@ -12,11 +12,8 @@ export default {
   computed: {},
   created() {},
   mounted() {},
-  methods: {}
+  methods: {},
 };
 </script>
 <style lang='less' scoped>
-#cDetails {
-  background-color: red;
-}
 </style>

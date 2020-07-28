@@ -19,6 +19,7 @@ export function request(config) {
         return res.data
     }, err => {
         console.log(err)
+        return { code: 500, msg: 'timeout' }
     })
     return instance(config)
 }

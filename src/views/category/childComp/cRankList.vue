@@ -56,7 +56,7 @@
 import navBar from "components/common/navbar/NavBar";
 import Scroll from "components/content/scroll/Scroll";
 export default {
-  name: "rankList",
+  name: "cRankList",
   data() {
     return {
       drawer: false,

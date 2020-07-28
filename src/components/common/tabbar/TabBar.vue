@@ -14,7 +14,9 @@ export default {
 #tab-bar {
   display: flex;
   width: 100%;
-  line-height: 50px;
+  // height: 50px;
+  line-height: 30px;
+  padding: 1% 0;
   position: fixed;
   bottom: 0;
   background-color: #fff;

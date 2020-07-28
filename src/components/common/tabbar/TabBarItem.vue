@@ -6,6 +6,7 @@
     <div v-else>
       <slot name="item-icon-active">用来插入选中图片</slot>
     </div>
+    <slot name="item-text"></slot>
   </div>
 </template>
 
@@ -15,19 +16,20 @@ export default {
   props: {
     //接收父组件传递
     path: {
-      type: String
-    }
+      type: String,
+    },
   },
   computed: {
     isActive() {
       return this.$route.path.indexOf(this.path) !== -1;
-    }
+    },
   },
   methods: {
     itemClick() {
+      console.log(this.path)
       this.$router.replace(this.path);
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -10,74 +10,98 @@ const routes = [
     },
     {
         path: "/home",
-        name: "home",
+        name: "Home",
         component: () => import("views/home/Home"),
         meta: {
-            title: "home"
+            title: "主页"
         },
     },
     {
         path: "/category",
-        name: "category",
+        name: "Category",
         component: () => import("views/category/Category"),
         meta: {
-            title: "category"
+            title: "分类"
         }
     },
     {
-        path: "/category/rl",
-        name: "rankList",
+        path: "/category/rl/:id",
+        name: "cRankList",
         component: () => import("views/category/childComp/cRankList"),
         meta: {
             title: "rankList"
         },
     },
     {
-        path: "/category/details/:id",
-        name: "cDetails",
-        component: () => import("views/category/childComp/cDetails"),
+        path: "/details/:did",
+        name: "Details",
+        component: () => import("views/details/Details"),
         meta: {
             title: "详情"
         },
     },
     {
-        path: "/search",
-        name: "search",
-        component: () => import("components/content/search/Search"),
+        path: "/search/:threeId",
+        name: "Search",
+        component: () => import("views/search/Search"),
         meta: {
-            title: "search"
+            title: "搜索"
+        }
+    },
+    {
+        path: "/kw",
+        name: "Keywords",
+        component: () => import("views/keywords/Keywords"),
+        meta: {
+            title: "关键字"
         }
     },
     {
         path: "/login",
-        name: "login",
-        component: () => import("components/content/login/Login"),
+        name: "Login",
+        component: () => import("views/login/Login"),
         meta: {
-            title: "login"
+            title: "登录"
         }
     },
     {
-        path: "/surprise",
-        name: "surprise",
+        path: "/jx",
+        name: "Surprise",
         component: () => import("views/surprise/Surprise"),
         meta: {
-            title: "surprise"
+            title: "京喜"
+        },
+    },
+    {
+        path: "/jc",
+        name: "JxCategory",
+        component: () => import("views/surprise/jxCategory/JxCategory"),
+        meta: {
+            title: "京喜分类"
+        },
+    },
+    {
+        path: "/live",
+        name: "Live",
+        component: () => import("views/surprise/live/Live"),
+        meta: {
+            title: "直播"
         },
     },
     {
         path: "/shopcart",
-        name: "shopcart",
+        name: "Shopcart",
         component: () => import("views/cat/Shopcart"),
         meta: {
-            title: "shopcart"
+            title: "购物车"
         },
     },
     {
         path: "/my",
-        name: "my",
+        name: "Profile",
         component: () => import("views/profile/Profile"),
         meta: {
-            title: "my"
+            title: "我的"
         },
     },
 ]
@@ -85,10 +109,10 @@ const routes = [
 // 3.创建一个vue-router实例
 const routers = new VueRouter({
     routes,
-    linkActiveClass: "active"
+    linkActiveClass: "active",
+    mode: "history"
 })
 routers.beforeEach((to, from, next) => {
-    console.log(to)
     document.title = to.matched[0].meta.title
     next()
 })

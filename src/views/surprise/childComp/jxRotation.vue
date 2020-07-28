@@ -2,7 +2,7 @@
   <rotation obj="rotation">
     <rotation-item v-for="(item,index) in cbanners" :key="index">
       <a :href="item.href">
-        <img :src="path+bannerSrc+item.crs" />
+        <img :src="path+item.src" @load="imageLoad"/>
       </a>
     </rotation-item>
   </rotation>
@@ -15,28 +15,32 @@ export default {
   name: "jxRotation",
   components: {
     Rotation,
-    RotationItem
+    RotationItem,
   },
   props: {
     cbanners: {
       type: Array,
       default() {
         return [];
-      }
-    }
+      },
+    },
   },
   data() {
     return {
-      path: "http://106.12.85.17:9091/",
-      bannerSrc: "public/image/banner/"
+      path: "http://106.12.85.17:8090/public/image/banner/",
     };
-  }
+  },
+  methods: {
+    imageLoad() {
+      this.$emit("bannerImgLoad");
+    },
+  },
 };
 </script>
 
 <style lang="less" scoped>
 img {
-  width:93%;
+  width: 93%;
   border-radius: 10px;
 }
 </style>

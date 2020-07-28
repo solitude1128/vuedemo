@@ -1,16 +1,15 @@
 <template>
-  <div :id="controlId" class="tabControl">
-    <div>
+  <div id="tabControl">
+    <div :class="{crosswise:isDirection,lengthways:!isDirection}">
       <slot></slot>
     </div>
     <div
       v-for="i in titleArr"
       :key="i.c1_id"
       @click="itemClick(i.c1_id)"
-      :class="{active:itemIndex == i.c1_id}"
+      :class="{crosswise:isDirection,lengthways:!isDirection,active:itemIndex == i.c1_id}"
     >
       <span>{{i.c1_name}}</span>
-      <slot name="subName"></slot>
     </div>
   </div>
 </template>
@@ -19,24 +18,20 @@
 export default {
   name: "TabControl",
   props: {
-    controlId: {
-      type: String,
-      default: "tabControl"
-    },
     titleArr: {
       type: Array,
       default() {
         return [];
-      }
-    }
-    // direction: {
-    //   type: "String",
-    //   default: "lengthways" //lengthways --- 纵向 crosswise --- 横向
-    // }
+      },
+    },
+    isDirection: {
+      type: Boolean, //true 代表独占一行 false 代表不独占一行
+      default: false,
+    },
   },
   data() {
     return {
-      itemIndex: 0
+      itemIndex: 0,
     };
   },
   components: {},
@@ -51,15 +46,23 @@ export default {
       // $parent 直接使用父组件的事件(只能找到上一个父元素)
       // this.$parent.tcClick(index);
       this.itemIndex = index;
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang='less' scoped>
-.tabControl {
-  width: 100%;
+#tabControl {
+  display: flex;
+  flex-wrap: wrap;
   font-size: 12px;
   line-height: 40px;
+  .crosswise {
+    width: 25%;
+  }
+  .lengthways {
+    width: 96%;
+    margin: 0 auto;
+  }
   .active {
     background-color: #fff;
     color: #c82519;

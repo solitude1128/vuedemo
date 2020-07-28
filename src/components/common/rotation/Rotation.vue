@@ -16,6 +16,7 @@
     </div>
     <!-- 放小圆点 索引指示器 -->
     <div class="indexIcator" v-if="showIndexIcator && slideCount>1">
+      <!-- 可以放置小圆点也可以跳转页面播放视频 -->
       <slot name="indexIcator">
         <div
           v-for="(item,index) in slideCount"
@@ -25,6 +26,9 @@
           @click="indexIcatorClick(index)"
         ></div>
       </slot>
+    </div>
+    <div>
+      <slot name="num"></slot>
     </div>
   </div>
 </template>
@@ -36,28 +40,28 @@ export default {
   props: {
     obj: {
       type: String,
-      default: undefined
+      default: undefined,
     },
     interval: {
       type: Number,
-      default: 3000 //轮播动画的时间,假设每三秒执行一次
+      default: 3000, //轮播动画的时间,假设每三秒执行一次
     },
     moveBase: {
       type: Number,
-      default: 0.3 //移动基数
+      default: 0.3, //移动基数
     },
     animateDuration: {
       type: Number,
-      default: 300 //移动基数
+      default: 300, //移动基数
     },
     showIndexIcator: {
       type: Boolean,
-      default: true
+      default: true,
     },
     showIcator: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   // 因为我们是封装了一个轮播图,有些特定的值,可能需要修改,所以我们需要动态的设定
   data() {
@@ -70,7 +74,7 @@ export default {
       playTimer: null, //接收定时器,用于定时器关闭
       startX: 0, //拖拽的起始坐标点
       currentX: 0, //记录移动后的坐标点
-      distance: 0 //记录两点的距离
+      distance: 0, //记录两点的距离
     };
   },
   mounted() {
@@ -202,8 +206,8 @@ export default {
     indexIcatorClick(index) {
       this.currentIndex = index + 1;
       this.scrollPosition(-this.currentIndex * this.totalWidth);
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -10,7 +10,7 @@
           placeholder="衣服"
           prefix-icon="el-icon-search"
           v-model="input"
-          v-on:focus="toSearch"
+          v-on:focus="toKeywords"
         ></el-input>
       </div>
       <div slot="right">
@@ -20,6 +20,7 @@
         </router-link>
       </div>
     </nav-bar>
+
     <scroll
       class="home-content"
       :probeType="3"
@@ -38,14 +39,15 @@
       <home-feature :cFea="feaArr"></home-feature>
 
       <!-- 商品展示 -->
-      <button @click="changeDirection">改变商品数据排列</button>
-      <div class="goodsTitle" v-for="(i,key) in goods" :key="key">
-        <h2>{{key}}</h2>
-      </div>
+      <goods-title :goodsT="goods"></goods-title>
       <goods-list :cgoods="showGoodsList" :isDirection="direction"></goods-list>
     </scroll>
-    <span @click="toTop" class="toTop" v-if="isShowBackTop">
+
+    <span @click="toTop()" class="circle toTop" v-if="isShowBackTop">
       <span class="el-icon-upload2"></span>
+    </span>
+    <span @click="changeDirection" class="circle">
+      <span class="el-icon-menu"></span>
     </span>
   </div>
 </template>
@@ -55,14 +57,28 @@ import navBar from "components/common/navbar/NavBar";
 // 引入公共组件中跟项目
 import Scroll from "components/content/scroll/Scroll";
 import goodsList from "components/content/goods/GoodsList";
+import goodsTitle from "components/content/goods/GoodsTitle";
 // 引入当前组件的子组件
 import homeRotation from "./childComp/homeRotation";
 import homeFeature from "./childComp/homeFeature";
 // 引入其他文件
-import * as base from "network/home";
+import { getHomeBanner, getHomeFeature } from "network/home";
+import { debounce } from "common/utils";
+import { getBanner, getFeature, getSearchGoods } from "common/common";
+import { getGoods } from "network/goods.js";
 
 export default {
-  name: "home",
+  name: "Home",
+  created() {
+    // 网络请求
+    getBanner(getHomeBanner, (res) => {
+      this.banners = res.data;
+    });
+    getFeature(getHomeFeature, 10, (res, data) => {
+      this.feaArr = data;
+    });
+    this.getGoodsData(this.tabCurrentType);
+  },
   data() {
     return {
       banners: null,
@@ -73,149 +89,123 @@ export default {
       goods: {
         recommend: {
           page: 0,
-          list: [],
           img:
-            "https://img11.360buyimg.com/jdphoto/jfs/t1/31601/22/15554/14040/5cc2a86fEbdb1098b/88174b36f85283b6.png"
+            "//img11.360buyimg.com/jdphoto/jfs/t1/31601/22/15554/14040/5cc2a86fEbdb1098b/88174b36f85283b6.png",
+          list: [],
         },
-        news: {
-          page: 10,
-          list: []
-        }
       },
       tabCurrentType: "recommend",
-      direction: true,
-      isLoadmore: true
+      direction: false,
+      isLoadmore: true,
+      saveY: 0, //滚动条y的值
     };
   },
   components: {
     navBar,
     Scroll,
     goodsList,
+    goodsTitle,
     homeRotation,
-    homeFeature
+    homeFeature,
   },
-  created() {
-    // 获取主页轮播数据
-    this.getHomeBanner();
-    // 获取功能视图数据
-    this.getHomeFeature();
-    this.getGoodsMax(this.tabCurrentType);
+  activated() {
+    console.log("组件激活状态");
+    this.$root.$children[0].isShowMT = true;
+    this.$root.$children[0].isShowJT = false;
+    // 在组件激活的时候,调整滚动条的位置
+    this.$refs.scrollCom.scrollTo(0, this.saveY, 0);
+    this.$refs.scrollCom.refresh();
+  },
+  deactivated() {
+    console.log("组件未激活状态");
+    // 在组件离开的时候,记录滚动条的位置
+    this.saveY = this.$refs.scrollCom.scroll.y;
   },
   methods: {
-    // 获取轮播图片
-    getHomeBanner() {
-      base.getHomeBanner().then(res => {
-        this.banners = res; //解构赋值
-      });
-    },
-    getHomeFeature() {
-      base.getHomeFeature().then(res => {
-        for (let i = 0; i < res.length / 10; i++) {
-          this.feaArr.push([]);
-          for (let j = 0; j < res.length; j++) {
-            if (parseInt(j / 10) == i) {
-              this.feaArr[i].push(res[j]);
-            }
-          }
-        }
-        console.log(this.feaArr);
-      });
-    },
-    getGoodsMax(type) {
-      let page = this.goods[type].page + 1;
-      base.getHomeMax(page).then(res => {
+    // 每加载一次这个事件会从数据库里取50条数据,且当前数组的页数加1
+    getGoodsData(type) {
+      let data = {
+        page: this.goods[type].page + 1,
+        pagesize: 10,
+      };
+      getSearchGoods(getGoods, data, (res) => {
         this.goods[type].page += 1;
-        this.goods[type].list.push(...res);
+        this.goods[type].list.push(...res.data);
+        console.log(this.goods[type].list);
         this.$refs.scrollCom.scroll.finishPullUp();
         this.isLoadmore = true;
       });
     },
+    // 加载更多
     loadMore() {
       if (!this.isLoadmore) return;
       this.isLoadmore = false;
-      this.getGoodsMax(this.tabCurrentType);
+      this.getGoodsData(this.tabCurrentType);
     },
+    // 主页滚动时的一些事件
     homeScroll(position) {
       this.isShowBackTop = -position.y > 1000;
       if (position.y >= 0) {
         this.$refs.scrollCom.scrollTo(0, 0, 100);
       }
     },
+    // 返回顶部
     toTop() {
       this.$refs.scrollCom.scrollTo(0, 0, 300);
     },
+    // 切换控制器选中的点击事件
     tabClick(type) {
       this.tabCurrentType = type;
     },
-    toSearch() {
-      this.$router.push("/search");
+    // 跳转关键字页面
+    toKeywords() {
+      this.$router.push("/kw");
     },
+    // 切换商品排列方式
     changeDirection() {
       this.direction = !this.direction;
-    }
+    },
   },
   computed: {
     showGoodsList() {
       return this.goods[this.tabCurrentType].list;
-    }
-  }
+    },
+  },
+  mounted() {
+    // 使用防抖方法,放置图片刷新被多次循环调用,在指定时间内,如果没有图片加载完成,我们在刷新scroll高度
+    const refresh = debounce(this.$refs.scrollCom.refresh, 50);
+    this.$bus.$on("goodsImageLoad", () => {
+      // 当图片加载完成,通过$bus总线执行当前方法然后对BScroll 进行重新计算高度
+      refresh();
+    });
+  },
 };
 </script>
 
 <style lang="less" scoped>
-#home {
-  position: relative;
-  height: 100vh;
-  overflow: hidden;
-  .home-content {
-    position: absolute;
-    top: 50px;
-    bottom: 50px;
-    left: 0;
-    .navbg {
-      background-image: linear-gradient(0deg, #f1503b, #c82519 50%);
-      position: fixed;
-      top: 0;
-      left: -25%;
-      height: 20vh;
-      width: 150%;
-      border-bottom-left-radius: 100%;
-      border-bottom-right-radius: 100%;
-      z-index: -1;
-    }
-    .goodsTitle {
-      display: flex;
-      h2 {
-        flex: 1;
-        margin: 0;
-      }
-    }
+.home-nav-bar {
+  background-color: #c82519;
+  color: #ffffff;
+  .left i,
+  .right i {
+    font-size: 22px;
   }
-  .toTop {
-    position: absolute;
-    bottom: 13%;
-    right: 2%;
-    background-color: rgb(235, 235, 235);
-    padding: 6px 8px;
-    border-radius: 50px;
-    font-size: 20px;
-    border: 1px solid rgb(114, 114, 114);
+}
+.home-content {
+  position: absolute;
+  bottom: 50px;
+  left: 0;
+  top: 50px;
+  .navbg {
+    background-image: linear-gradient(0deg, #f1503b, #c82519 50%);
   }
 }
 </style>
 
 <style lang="less">
-.home-nav-bar {
-  background-color: #c82519;
-  color: #ffffff;
-  .el-input__inner {
-    background-color: #f6f6f6;
-    border-radius: 50px;
-    height: 34px;
-  }
-  .left i,
-  .right i {
-    font-size: 22px;
-  }
+.el-input__inner {
+  background-color: #f6f6f6;
+  border-radius: 50px;
+  height: 34px;
 }
 </style>

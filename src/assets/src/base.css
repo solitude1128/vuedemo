@@ -19,14 +19,15 @@ li {
 
 #home,
 #surprise,
-#details {
+#details,
+#allF,
+#shopcart {
   position: relative;
   height  : 100vh;
   overflow: hidden;
 }
 
-#profile,
-#shopcart {
+#profile {
   height     : 100vh;
   overflow   : hidden;
   padding-top: 50px;

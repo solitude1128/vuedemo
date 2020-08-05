@@ -28,10 +28,6 @@ export default {
   created() {},
   mounted() {},
   methods: {},
-  activated() {
-    this.$root.$children[0].isShowMT = false;
-    this.$root.$children[0].isShowJT = false;
-  },
 };
 </script>
 <style lang='less' >

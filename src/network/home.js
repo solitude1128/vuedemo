@@ -5,11 +5,11 @@ export function getHomeBanner() {
         url: "/vuedemo/banner"
     })
 }
-export function getHomeFeature() {
+export function getHomeFeature(a) {
     return request({
         url: "/vuedemo/jd_feature",
-        params: {
-            show: 1
+        params: {//get请求数据时,用params请求数据
+            show: a
         }
     })
 }

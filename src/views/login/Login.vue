@@ -64,10 +64,6 @@ export default {
   },
   computed: {},
   created() {},
-  activated() {
-    this.$root.$children[0].isShowMT = false;
-    this.$root.$children[0].isShowJT = false;
-  },
   mounted() {},
   methods: {
     changeRegion() {

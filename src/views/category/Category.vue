@@ -10,7 +10,7 @@
           placeholder="电子琴"
           prefix-icon="el-icon-search"
           v-model="input"
-          v-on:focus="toKeywords"
+          v-on:focus="jumpPage('/kw')"
         ></el-input>
       </div>
     </nav-bar>
@@ -113,17 +113,11 @@ export default {
     this.getJdCategoryOne();
     this.getJdCategoryTwo();
     this.getJdCategoryThree();
-    this.$root.$children[0].isShowMT = true;
-    this.$root.$children[0].isShowJT = false;
     this.historyData =
       localStorage.historyData &&
       JSON.parse(localStorage.historyData).length > 0
         ? JSON.parse(localStorage.historyData)
         : [];
-  },
-  activated() {
-    this.$root.$children[0].isShowMT = true;
-    this.$root.$children[0].isShowJT = false;
   },
   methods: {
     // 定义网页相关事件
@@ -187,8 +181,8 @@ export default {
       const refresh = debounce(this.$refs.two.refresh, 1000);
       refresh();
     },
-    contentScroll(position) {
-      console.log("contentScroll被使用", position);
+    contentScroll(){
+      console.log("twoScroll");
     },
     saveData(a) {
       if (localStorage.historyData) {
@@ -210,10 +204,7 @@ export default {
       }
       console.log(this.historyData);
       localStorage.historyData = JSON.stringify(this.historyData);
-      this.$router.push("/search/" + a.c3_id);
-    },
-    toKeywords() {
-      this.$router.push("/kw");
+      this.jumpPage("/search/" + a.c3_id)
     },
     //网络请求
     getJdCategoryOne() {

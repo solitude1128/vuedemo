@@ -2,7 +2,7 @@
   <div id="surprise">
     <!-- 固定导航 -->
     <div class="fixed" v-if="isgtFixed">
-      <div class="jxipt" @click="toKeywords()">
+      <div class="jxipt" @click="jumpPage('/kw')">
         <el-input v-model="input" placeholder="安踏短袖" prefix-icon="el-icon-search"></el-input>
       </div>
       <goods-title :goodsT="goods" ref="gt" :isActive="tabCurrentType"></goods-title>
@@ -28,10 +28,10 @@
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="/home" icon="el-icon-s-home">首页</el-dropdown-item>
-              <el-dropdown-item command="/category" divided icon="el-icon-s-home">分类搜索</el-dropdown-item>
-              <el-dropdown-item command="/shopCar" divided icon="el-icon-s-home">购物车</el-dropdown-item>
-              <el-dropdown-item command="/my" divided icon="el-icon-s-home">我的京东</el-dropdown-item>
-              <el-dropdown-item command="/category" divided icon="el-icon-s-home">浏览记录</el-dropdown-item>
+              <el-dropdown-item command="/category" divided icon="el-icon-menu">分类搜索</el-dropdown-item>
+              <el-dropdown-item command="/shopCar" divided icon="el-icon-shopping-cart-2">购物车</el-dropdown-item>
+              <el-dropdown-item command="/my" divided icon="el-icon-user">我的京东</el-dropdown-item>
+              <el-dropdown-item command="/category" divided icon="el-icon-s-order">浏览记录</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
@@ -39,7 +39,7 @@
 
       <div class="navbg"></div>
 
-      <div class="jxipt" @click="toKeywords()">
+      <div class="jxipt" @click="jumpPage('/kw')">
         <el-input v-model="input" placeholder="安踏短袖" prefix-icon="el-icon-search"></el-input>
       </div>
 
@@ -117,10 +117,6 @@ export default {
     });
     this.getGoods(this.tabCurrentType);
   },
-  activated() {
-    this.$root.$children[0].isShowMT = false;
-    this.$root.$children[0].isShowJT = true;
-  },
   methods: {
     getGoods(type) {
       let data = {
@@ -157,9 +153,6 @@ export default {
     },
     toTop() {
       this.$refs.scrollCom.scrollTo(0, 0, 300);
-    },
-    toKeywords() {
-      this.$router.push("/kw");
     },
     pushRouter(path) {
       this.$router.push(path);

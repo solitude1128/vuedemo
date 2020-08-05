@@ -2,7 +2,7 @@
   <rotation obj="rotation">
     <rotation-item v-for="(item,index) in cbanners" :key="index">
       <a :href="item.href">
-        <img :src="path+bannerSrc+item.crs" />
+        <img :src="$store.state.path+'/banner/'+item.crs" />
       </a>
     </rotation-item>
   </rotation>
@@ -15,28 +15,25 @@ export default {
   name: "homeRotation",
   components: {
     Rotation,
-    RotationItem
+    RotationItem,
   },
   props: {
     cbanners: {
       type: Array,
       default() {
         return [];
-      }
-    }
+      },
+    },
   },
   data() {
-    return {
-      path: "http://106.12.85.17:8090/",
-      bannerSrc: "public/image/banner/"
-    };
-  }
+    return {};
+  },
 };
 </script>
 
 <style lang="less" scoped>
 img {
-  width:93%;
+  width: 93%;
   border-radius: 10px;
 }
 </style>

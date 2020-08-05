@@ -56,7 +56,7 @@ export default {
             "https://img11.360buyimg.com/jdphoto/s130x100_jfs/t1/68400/36/12368/3153/5d9c4b13E0e0d80a8/876c40f17d91ce44.png",
           aimg:
             "https://img11.360buyimg.com/jdphoto/s130x100_jfs/t1/47480/36/12929/3209/5d9c4b13E97caa63a/4dc0ec8a7e47c2b7.png",
-          src: "/my",
+          src: "/profile",
         },
       ],
       path: "http://106.12.85.17:9091/",

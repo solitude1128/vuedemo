@@ -4,7 +4,7 @@
       <slot></slot>
     </div>
     <!-- 放小圆点 索引指示器 -->
-    <div class="indexIcator" v-if="feature.length > 1">
+    <div class="indexIcator" v-if="itemLen > 1">
       <slot name="indexIcator">
         <div
           v-for="(item,index) in itemLen"
@@ -25,16 +25,6 @@ export default {
       type: String,
       default: "featureBox",
     },
-    showIcator: {
-      type: Boolean,
-      default: true,
-    },
-    feature: {
-      type: Array,
-      default() {
-        return [];
-      },
-    },
     animateDuration: {
       type: Number,
       default: 300, //移动基数
@@ -48,17 +38,22 @@ export default {
       type: Boolean,
       default: false,
     },
+    isJump: {
+      //是否允许跳转
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
       itemLen: 0,
       totalWidth: 0,
       feaStyle: {},
-      currentIndex: 0,
       touch: false,
       startX: 0, //拖拽的起始坐标点
       currentX: 0, //记录移动后的坐标点
       distance: 0, //记录两点的距离
+      currentIndex: 0,
       icatorIndex: 0,
     };
   },
@@ -75,12 +70,20 @@ export default {
       let feaEl = divEl.querySelector(`.feature`);
       let itemEls = feaEl.querySelectorAll(".item");
       // 根据传递的参数,判断是否需要复制子对象
-      if (this.iscopy && itemEls.length > 1) {
+      if (this.iscopy && itemEls.length > 1 && !this.isJump) {
         let cloneFirst = itemEls[0].cloneNode(true);
         let cloneLast = itemEls[itemEls.length - 1].cloneNode(true);
         feaEl.appendChild(cloneFirst);
         feaEl.insertBefore(cloneLast, itemEls[0]);
         this.currentIndex = 1;
+      }else{
+        let span = document.createElement("span");
+        span.style.width = "30px";
+        span.style.position = "absolute";
+        span.style.left = itemEls.length * divEl.offsetWidth + "px";
+        span.style.top = "0";
+        span.innerHTML = "继续左划查看详情";
+        feaEl.appendChild(span);
       }
       this.itemLen = itemEls.length;
       this.totalWidth = feaEl.offsetWidth;
@@ -123,6 +126,7 @@ export default {
     },
     touchMove(e) {
       this.currentX = e.touches[0].pageX;
+      // 获取移动前和移动后的距离差
       this.distance = this.currentX - this.startX;
       if (!this.iscopy) {
         if (this.distance > 0 && this.currentIndex == 0) {
@@ -134,7 +138,9 @@ export default {
           return;
         }
       }
+      // 获取一下在手动移动前的位置
       let currentPosition = -this.currentIndex * this.totalWidth;
+      // 获取已经移动的距离
       let moveDistance = this.distance + currentPosition;
       this.setTransfrom(moveDistance);
     },

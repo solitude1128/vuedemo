@@ -1,9 +1,8 @@
 <template>
   <tab-bar>
     <tab-bar-item class="jxItem" v-for="(i,index) in tabbar" :key="index" :path="i.path">
-      <img slot="item-icon" :src="path+i.img" />
-      <img v-if="i.aImg" slot="item-icon-active" :src="path+i.aImg" />
-      <router-link v-else to="/my"></router-link>
+      <img slot="item-icon" :src="$store.state.path+'/tabbar/'+i.img" />
+      <img slot="item-icon-active" :src="$store.state.path+'/tabbar/'+i.aImg" />
       <span slot="item-text">{{i.name}}</span>
     </tab-bar-item>
   </tab-bar>
@@ -22,7 +21,6 @@ export default {
   data() {
     return {
       tabbar: [],
-      path: "http://106.12.85.17:8090/public/image/tabbar/",
     };
   },
   mounted() {

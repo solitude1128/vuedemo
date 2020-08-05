@@ -51,10 +51,6 @@ export default {
   created() {
     this.getJdCategoryOne();
   },
-  activated() {
-    this.$root.$children[0].isShowMT = false;
-    this.$root.$children[0].isShowJT = true;
-  },
   methods: {
     tcClick(index) {
       // 传递进来的参数用于判断按钮是否被选中

@@ -2,7 +2,7 @@
   <div id="profile">
     <!-- 导航 -->
     <nav-bar class="pf-nav-bar">
-      <div slot="left">
+      <div slot="left" @click="jumpPage('/home')">
         <i class="el-icon-arrow-left"></i>
       </div>
       <div slot="center">我的京东</div>
@@ -13,10 +13,10 @@
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="/home" icon="el-icon-s-home">首页</el-dropdown-item>
-            <el-dropdown-item command="/category" divided icon="el-icon-s-home">分类搜索</el-dropdown-item>
-            <el-dropdown-item command="/shopCar" divided icon="el-icon-s-home">购物车</el-dropdown-item>
-            <el-dropdown-item command="/my" divided icon="el-icon-s-home">我的京东</el-dropdown-item>
-            <el-dropdown-item command="/category" divided icon="el-icon-s-home">浏览记录</el-dropdown-item>
+            <el-dropdown-item command="/category" divided icon="el-icon-menu">分类搜索</el-dropdown-item>
+            <el-dropdown-item command="/shopCar" divided icon="el-icon-shopping-cart-2">购物车</el-dropdown-item>
+            <el-dropdown-item command="/my" divided icon="el-icon-user">我的京东</el-dropdown-item>
+            <el-dropdown-item command="/category" divided icon="el-icon-s-order">浏览记录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -170,19 +170,16 @@ export default {
           text: "闲置换钱",
         },
       ],
-      userName: null,
+      userId: null,
     };
   },
   components: {
     navBar,
   },
   created() {
-    this.userName = this.$root.$children[0].userName;
-    // if (this.userName == null) this.$router.push("/login");
-  },
-  activated() {
-    this.$root.$children[0].isShowMT = true;
-    this.$root.$children[0].isShowJT = false;
+    this.userId = this.$store.state.userId;
+    console.log(this.userId);
+    // if (this.userId == null) this.jumpPage("/login");
   },
   methods: {
     pushRouter(path) {
@@ -195,6 +192,9 @@ export default {
 <style lang="less" scoped>
 .pf-nav-bar {
   background-color: #fff;
+}
+.el-dropdown-menu {
+  text-align: left;
 }
 .navbg {
   background-image: linear-gradient(90deg, #eb3c3c, #ff7459);

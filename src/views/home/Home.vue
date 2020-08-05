@@ -10,7 +10,7 @@
           placeholder="衣服"
           prefix-icon="el-icon-search"
           v-model="input"
-          v-on:focus="toKeywords"
+          v-on:focus="jumpPage('/kw')"
         ></el-input>
       </div>
       <div slot="right">
@@ -46,7 +46,7 @@
     <span @click="toTop()" class="circle toTop" v-if="isShowBackTop">
       <span class="el-icon-upload2"></span>
     </span>
-    <span @click="changeDirection" class="circle">
+    <span @click=" this.direction = !this.direction" class="circle">
       <span class="el-icon-menu"></span>
     </span>
   </div>
@@ -110,8 +110,6 @@ export default {
   },
   activated() {
     console.log("组件激活状态");
-    this.$root.$children[0].isShowMT = true;
-    this.$root.$children[0].isShowJT = false;
     // 在组件激活的时候,调整滚动条的位置
     this.$refs.scrollCom.scrollTo(0, this.saveY, 0);
     this.$refs.scrollCom.refresh();
@@ -156,14 +154,6 @@ export default {
     // 切换控制器选中的点击事件
     tabClick(type) {
       this.tabCurrentType = type;
-    },
-    // 跳转关键字页面
-    toKeywords() {
-      this.$router.push("/kw");
-    },
-    // 切换商品排列方式
-    changeDirection() {
-      this.direction = !this.direction;
     },
   },
   computed: {

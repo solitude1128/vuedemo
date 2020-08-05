@@ -2,7 +2,7 @@
   <rotation obj="rotation">
     <rotation-item v-for="(item,index) in cbanners" :key="index">
       <a :href="item.href">
-        <img :src="path+item.src" @load="imageLoad"/>
+        <img :src="$store.state.path+'/banner/'+item.src" @load="imageLoad" />
       </a>
     </rotation-item>
   </rotation>
@@ -26,9 +26,7 @@ export default {
     },
   },
   data() {
-    return {
-      path: "http://106.12.85.17:8090/public/image/banner/",
-    };
+    return {};
   },
   methods: {
     imageLoad() {

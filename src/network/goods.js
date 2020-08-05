@@ -16,3 +16,12 @@ export function getGoodsId(id) {
         }
     })
 }
+// 定义goods类
+export class goods {
+    constructor(goodsData, norms, relationGoods) {
+        // 把你要用的字段都进行取值赋值
+        this.goodsdata = goodsData
+        this.norms = norms
+        this.relationGoods = relationGoods
+    }
+}

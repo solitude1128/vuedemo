@@ -65,10 +65,6 @@ export default {
   components: {
     navBar,
   },
-  activated() {
-    this.$parent.isShowJT = false;
-    this.$parent.isShowMT = false;
-  },
   computed: {},
   created() {},
   mounted() {},

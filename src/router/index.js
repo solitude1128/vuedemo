@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from "@/store"
 
 Vue.use(VueRouter)
 
@@ -97,11 +98,19 @@ const routes = [
         },
     },
     {
-        path: "/my",
+        path: "/profile",
         name: "Profile",
         component: () => import("views/profile/Profile"),
         meta: {
             title: "我的"
+        },
+    },
+    {
+        path: "/af",
+        name: "AllFeature",
+        component: () => import("views/allFeature/AllFeature"),
+        meta: {
+            title: "全部功能组件"
         },
     },
 ]
@@ -114,6 +123,15 @@ const routers = new VueRouter({
 })
 routers.beforeEach((to, from, next) => {
     document.title = to.matched[0].meta.title
+    console.log(to, from);
+    for (let i in store.state.TabBar) {
+        store.state.TabBar[i] = false
+    }
+    if (to.path == "/home" || to.path == "/category" || to.path == "/shopcart" || to.path == "/profile") {
+        store.state.TabBar.isJdTabBar = true
+    } else if (to.path == "/jx" || to.path == "/jc" || to.path == "/live") {
+        store.state.TabBar.isJxTabBar = true
+    }
     next()
 })
 

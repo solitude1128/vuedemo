@@ -1,6 +1,6 @@
 <template>
   <!-- 用于关联feature组件 -->
-  <feature :iscopy="false" :feature="cFea">
+  <feature :iscopy="false">
     <feature-item v-for="(img,index) in cFea" :key="index">
       <img :src="path+img" width="100%" />
     </feature-item>
@@ -29,6 +29,7 @@ export default {
 
 <style lang="less">
 #featureBox {
+  margin: 0;
   ul {
     margin: 0;
   }

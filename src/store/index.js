@@ -13,7 +13,7 @@ const st = {
         isJxTabBar: false
     },
     // 用户名
-    userInfo: 1,
+    userInfo: '',
     keepExclude: "Details,Cart",
     path: "http://106.12.85.17:8090/public/image",
     shopCart: {

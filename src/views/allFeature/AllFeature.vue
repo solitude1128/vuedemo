@@ -29,11 +29,11 @@
           />
         </dt>
         <dd v-for="(j,index) in i" :key="index">
-          <!-- <img :src="$store.state.path+'/feature/'+j.imgsrc" alt="啊啊啊" /> -->
-          <img
+          <img :src="$store.state.path+'/feature/'+j.imgsrc" alt="啊啊啊" width="50%" />
+          <!-- <img
             src="//m.360buyimg.com/mobilecms/s80x80_jfs/t1/110682/29/897/4880/5e7344b3E8fb10394/9c44e06113d83d21.png.webp"
             width="50%"
-          />
+          /> -->
           <p>{{j.Title}}</p>
         </dd>
       </dl>

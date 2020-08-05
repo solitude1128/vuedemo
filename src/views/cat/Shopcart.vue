@@ -44,7 +44,13 @@
           朝阳区三环到四环之间
           <span class="right">编译商品</span>
         </p>
-        <dl v-for="(i,key) in $store.state.shopCart" :key="key">
+        <cart-data
+          v-for="(i,key) in $store.state.shopCart"
+          :key="key"
+          :cartdata="i"
+          :shopName="key"
+        ></cart-data>
+        <!-- <dl v-for="(i,key) in $store.state.shopCart" :key="key">
           <dt v-if="i.length > 0">
             <div class="inputBox">
               <el-checkbox
@@ -118,7 +124,7 @@
               </p>
             </div>
           </dd>
-        </dl>
+        </dl>-->
       </div>
     </scroll>
   </div>
@@ -126,6 +132,7 @@
 <script>
 import navBar from "components/common/navbar/NavBar";
 import Scroll from "components/content/scroll/Scroll";
+import cartData from "./childCom/cartData";
 export default {
   name: "Shopcart",
   created() {
@@ -138,16 +145,12 @@ export default {
     }
   },
   data() {
-    return {
-      checkAll: false,
-      checkedCities: [],
-      isIndeterminate: true,
-      num: 0,
-    };
+    return {};
   },
   components: {
     navBar,
     Scroll,
+    cartData,
   },
   methods: {
     getAddress() {
@@ -159,35 +162,10 @@ export default {
     getShopCart() {
       this.$store.dispatch("getShopCart", this.$store.state);
     },
-    handleCheckAllChange(val) {
-      console.log(val);
-      // this.checkedCities = val ? cityOptions : [];
-      this.isIndeterminate = false;
-    },
-    handleCheckedCitiesChange(value) {
-      console.log(value);
-      // let checkedCount = value.length;
-      // this.checkAll = checkedCount === this.cities.length;
-      // this.isIndeterminate =
-      //   checkedCount > 0 && checkedCount < this.cities.length;
-    },
     shopCartScroll(position) {
       if (position.y >= 0) {
         this.$refs.shopScroll.scrollTo(0, 0, 100);
       }
-    },
-    changeNum(num, type) {
-      if (type == "minus") {
-        this.num--;
-      } else if (type == "add") {
-        this.num++;
-      }
-      console.log(this.num);
-    },
-  },
-  filters: {
-    fMoney(msg) {
-      return "$ " + parseFloat(msg).toFixed(2);
     },
   },
 };
@@ -217,116 +195,6 @@ export default {
       font-size: 12px;
       border-bottom-left-radius: 20px;
       border-bottom-right-radius: 20px;
-    }
-    dl {
-      background-color: #fff;
-      border-radius: 5px;
-      dt,
-      dd {
-        display: flex;
-        padding: 15px;
-        font-size: 12px;
-        margin: 0;
-        .inputBox {
-          flex: 1;
-          height: auto;
-        }
-      }
-      dt {
-        .leftR {
-          flex: 4;
-          text-align: left;
-          font-weight: bold;
-          i {
-            font-size: 14px;
-          }
-        }
-        .rightR {
-          text-align: right;
-          flex: 4;
-          .yhq {
-            background-color: rgb(253, 213, 213);
-            color: red;
-            border-radius: 20px;
-            padding: 2px 5px;
-          }
-        }
-      }
-      dd {
-        border-bottom: 1px solid rgb(236, 236, 236);
-        .inputBox {
-          line-height: 130px;
-        }
-        .box {
-          flex: 8;
-          p {
-            margin: 0;
-            height: 30px;
-          }
-          .gn {
-            text-align: right;
-            line-height: 40px;
-            color: black;
-          }
-          .mj {
-            background-color: red;
-            color: white;
-            padding: 0 3px;
-            margin-right: 3px;
-          }
-          .contentBox {
-            display: flex;
-            img {
-              width: 35%;
-              border-radius: 10px;
-              flex: 1;
-            }
-            div {
-              flex: 8;
-              text-align: left;
-              p {
-                margin: 10px 5px;
-                height: auto;
-                text-overflow: ellipsis;
-                overflow: hidden;
-                display: -webkit-box;
-                -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
-              }
-              .gg span {
-                padding: 0 5px;
-                background-color: rgb(230, 230, 230);
-                border-radius: 10px;
-              }
-              .num {
-                display: flex;
-                margin-bottom: 0;
-                .money {
-                  flex: 2;
-                  color: red;
-                  font-size: 16px;
-                  font-weight: bold;
-                }
-                .rightBox {
-                  flex: 1;
-                  color: rgb(59, 59, 59);
-                  font-weight: bold;
-                  span {
-                    padding: 0 3px;
-                  }
-                  input {
-                    width: 42%;
-                    text-align: center;
-                    background-color: rgb(231, 231, 231);
-                    border: none;
-                    outline: none;
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
     }
   }
 }

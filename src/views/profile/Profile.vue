@@ -177,9 +177,9 @@ export default {
     navBar,
   },
   created() {
-    this.userId = this.$store.state.userId;
-    console.log(this.userId);
-    // if (this.userId == null) this.jumpPage("/login");
+    this.userInfo = this.$store.state.userInfo;
+    console.log(this.userInfo);
+    if (!this.userId) this.jumpPage("/login");
   },
   methods: {
     pushRouter(path) {

@@ -32,7 +32,7 @@
 import navBar from "components/common/navbar/NavBar";
 import Scroll from "components/content/scroll/Scroll";
 import TabControl from "components/content/tabControl/TabControl";
-import * as base from "network/jd_category";
+import { getJdCategoryOne } from "network";
 export default {
   name: "JxCategory",
   data() {
@@ -87,7 +87,7 @@ export default {
       }
     },
     getJdCategoryOne() {
-      base.getJdCategoryOne().then((res) => {
+      getJdCategoryOne().then((res) => {
         if (res.data) this.oneData = res.data;
       });
     },

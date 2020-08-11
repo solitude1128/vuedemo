@@ -6,15 +6,39 @@
       </div>
       <div slot="center">京东注册</div>
     </nav-bar>
-    <div v-if="!isshow">
-      <div class="inputBox">
-        <span :v-model="region" @click="changeRegion">
-          {{region}}
-          <span class="el-icon-arrow-down"></span>
-        </span>
-        <el-input placeholder="请输入手机号" :oninput="changeValue()" v-model="phone" clearable></el-input>
-      </div>
-      <el-button type="danger" :disabled="isgo" @click="isshow = true">下一步</el-button>
+
+    <div v-if="!isshow" class="bigBox">
+      <el-tabs v-model="activeName">
+        <el-tab-pane label="手机号快速注册" name="phone">
+          <div class="inputBox">
+            <span :v-model="region" @click="changeRegion">
+              {{region}}
+              <span class="el-icon-arrow-down"></span>
+            </span>
+            <el-input placeholder="请输入手机号" :oninput="changeValue()" v-model="phone" clearable></el-input>
+          </div>
+          <el-button type="danger" :disabled="isgo" @click="isshow = true">下一步</el-button>
+        </el-tab-pane>
+        <el-tab-pane label="用户注册" name="user">
+          <div class="inputBox">
+            <i class="el-icon-user"></i>
+            <el-input placeholder="请设置用户名" v-model="userName" clearable></el-input>
+          </div>
+          <div class="inputBox">
+            <i class="el-icon-lock"></i>
+            <el-input placeholder="请设置密码" show-password v-model="pwd" clearable></el-input>
+          </div>
+          <div class="inputBox">
+            <i class="el-icon-mobile-phone"></i>
+            <el-input placeholder="请填写手机号" v-model="phone" clearable></el-input>
+          </div>
+          <div class="inputBox">
+            <i class="el-icon-message"></i>
+            <el-input placeholder="请设置邮箱" v-model="email" clearable></el-input>
+          </div>
+          <el-button type="danger" disabled>确认注册</el-button>
+        </el-tab-pane>
+      </el-tabs>
     </div>
     <div v-else>啊啊啊</div>
   </div>
@@ -29,7 +53,11 @@ export default {
       region: "+86",
       isgo: false,
       phone: "",
+      userName: "",
+      pwd: "",
+      email: "",
       isshow: false,
+      activeName: "phone",
     };
   },
   components: {
@@ -72,18 +100,25 @@ export default {
   background-color: #fff;
   padding-top: 50px;
   height: calc(100vh - 50px);
-  .inputBox {
-    display: flex;
+  .bigBox {
     width: 90%;
     margin: 0 auto;
-    line-height: 56px;
-    border-bottom: 1px solid rgb(236, 236, 236);
-    color: black;
-    span {
-      flex: 1;
-    }
-    .el-input {
-      flex: 4;
+    .inputBox {
+      display: flex;
+      line-height: 54px;
+      border-bottom: 1px solid rgb(236, 236, 236);
+      color: black;
+      span {
+        flex: 1;
+      }
+      i {
+        flex: 0.6;
+        font-size: 20px;
+        line-height: 54px;
+      }
+      .el-input {
+        flex: 4;
+      }
     }
   }
 }
@@ -124,9 +159,20 @@ export default {
   }
 }
 .el-button {
-  width: 90%;
+  width: 100%;
   border-radius: 50px;
   margin: 15% 0;
   height: 50px;
+}
+.el-tabs__nav {
+  width: 100%;
+  .el-tabs__item {
+    width: 50%;
+    font-size: 16px;
+    color: #f10000;
+  }
+  .el-tabs__active-bar {
+    background-image: linear-gradient(90deg, #f10000, #ff2000 73%, #ff4f18);
+  }
 }
 </style>

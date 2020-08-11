@@ -2,7 +2,7 @@
   <div ref="shop_cart_details">
     <dd v-for="(j,index) in cartdata" :key="index">
       <div class="inputBox">
-        <el-checkbox-group v-model="goodsIdArr" @change="shopCheck">
+        <el-checkbox-group v-model="goodsIdArr" @change="shopCheck(goodsIdArr,index)">
           <el-checkbox :label="j.goods_id"></el-checkbox>
         </el-checkbox-group>
       </div>
@@ -56,6 +56,13 @@
 <script>
 export default {
   name: "cartData",
+  created() {
+    for (let i in this.cartdata) {
+      if (this.cartdata[i].ischeck == 1) {
+        this.goodsIdArr.push(this.cartdata[i].goods_id);
+      }
+    }
+  },
   props: {
     shopName: {
       type: String,
@@ -64,18 +71,33 @@ export default {
   },
   data() {
     return {
-      ischeck: false,
       goodsIdArr: [],
     };
   },
   methods: {
     // 商品单选
-    shopCheck(value) {
-      console.log(value);
-      // this.$store.state.totalPayment +=
-      //   this.cartdata[index].money_now * this.cartdata[index].num * temp;
-      // this.$store.state.totalNum += this.cartdata[index].num * temp;
-      // this.cartdata[index].ischeck = Number(e.target.checked).toString();
+    shopCheck(val, index) {
+      let e = e || event;
+      let temp = e.target.nextSibling.checked ? 1 : -1;
+      this.$store.state.totalPayment +=
+        this.cartdata[index].money_now * this.cartdata[index].num * temp;
+      this.$store.state.totalNum += this.cartdata[index].num * temp;
+      this.cartdata[index].ischeck = Number(
+        e.target.nextSibling.checked
+      ).toString();
+      console.log(this.cartdata);
+      // 如果选中的商品等于此对象下原有的长度
+      if (val.length == this.cartdata.length) {
+        // 则让此商铺选中
+        this.$parent.$parent.checkShops.push(this.shopName);
+      } else {
+        // 否则不等于就查商铺的数组里是否包含此商铺
+        let a = this.$parent.$parent.checkShops.indexOf(this.shopName);
+        // 如果包含则在数组里删除此商铺
+        if (a != -1) {
+          this.$parent.$parent.checkShops.splice(a, 1);
+        }
+      }
     },
     // 改变购买商品的数量
     changeNum(index, type) {
@@ -136,8 +158,18 @@ export default {
 <style lang='less' scoped>
 dd {
   border-bottom: 1px solid rgb(236, 236, 236);
+  display: flex;
+  padding: 15px;
+  font-size: 12px;
+  margin: 0;
   .inputBox {
+    flex: 1;
+    height: auto;
     line-height: 130px;
+    label {
+      width: 23px;
+      overflow: hidden;
+    }
   }
   .box {
     flex: 8;

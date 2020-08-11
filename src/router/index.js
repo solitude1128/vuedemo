@@ -121,6 +121,14 @@ const routes = [
             title: "全部功能组件"
         },
     },
+    {
+        path: "/accounts",
+        name: "Accounts",
+        component: () => import("views/accounts/Accounts"),
+        meta: {
+            title: "结算页面"
+        },
+    },
 ]
 
 // 3.创建一个vue-router实例

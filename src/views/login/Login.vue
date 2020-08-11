@@ -2,7 +2,7 @@
   <div id="login">
     <nav-bar>
       <div slot="left">
-        <router-link to="/home" class="el-icon-arrow-left" tag="i"></router-link>
+        <i @click="$router.go(-1)" class="el-icon-arrow-left"></i>
       </div>
       <div slot="center">京东登录注册</div>
     </nav-bar>
@@ -41,8 +41,7 @@
       </div>
       <el-button type="danger" plain @click="popUpBox('暂不支持!','使用此功能，请安装最新版京东APP','warning')">一键登录</el-button>
       <p>
-        <span class="left" v-if="isPhoneLogin" @click="isPhoneLogin = !isPhoneLogin">账号密码登录</span>
-        <span class="left" v-else @click="isPhoneLogin = !isPhoneLogin">短信验证码登录</span>
+        <span class="left" @click="isPhoneLogin = !isPhoneLogin">{{isPhoneLogin?'账号密码登录':'短信验证码登录'}}</span>
         <span class="right" @click="jumpPage('/r')">手机快速注册</span>
       </p>
       <div class="striping">
@@ -59,9 +58,8 @@
         </a>
       </p>
       <p>
-        <span v-if="isPhoneLogin">未注册的手机号验证后将自动创建京东账号, 登录即代表您已同意</span>
-        <span v-else>登录即代表您已同意</span>
-        <a href="//in.m.jd.com/help/app/private_policy.html">京东隐私政策</a>
+        <span>{{isPhoneLogin?'未注册的手机号验证后将自动创建京东账号, 登录即代表您已同意':'登录即代表您已同意'}}</span>
+        <a href="http://106.12.85.17:8090/app/help/private_policy.html">京东隐私政策</a>
       </p>
     </div>
   </div>
@@ -122,7 +120,11 @@ export default {
     loginClick() {
       if (this.code == "123123") {
         console.log("验证码正确");
-        haveData(isPhone, this.phone, (res) => {
+        let obj = {
+          phone: this.phone,
+          isHave: 0,
+        };
+        haveData(isPhone, obj, (res) => {
           console.log(res);
           if (res.code != 200) {
             // 直接登录然后跳转

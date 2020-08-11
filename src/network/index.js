@@ -76,11 +76,12 @@ export function getJdCategoryMax(page) {
 }
 
 // 手机号是否注册
-export function isPhone(phone) {
+export function isPhone(obj) {
     return request({
         url: "/vuedemo/land_have_telphone",
         params: {
-            telphone: phone,
+            telphone: obj.phone,
+            isHave: obj.isHave,
         }
     })
 }

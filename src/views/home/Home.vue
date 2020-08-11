@@ -62,10 +62,9 @@ import goodsTitle from "components/content/goods/GoodsTitle";
 import homeRotation from "./childComp/homeRotation";
 import homeFeature from "./childComp/homeFeature";
 // 引入其他文件
-import { getHomeBanner, getHomeFeature } from "network";
+import { getHomeBanner, getHomeFeature, getGoods } from "network";
 import { debounce } from "common/utils";
 import { noData, haveData, getFeature } from "common/common";
-import { getGoods } from "network/goods.js";
 
 export default {
   name: "Home",

@@ -48,12 +48,11 @@
             <el-button @click="jumpPage('/login')" type="danger" round>登录</el-button>
           </p>
         </div>
-        <div v-for="(item,key) in shopNameArr" :key="key">
-          <!-- <dl v-if="shopCart[item]"> -->
+        <div v-for="(item,index) in shopNameArr" :key="index">
           <dl>
             <dt>
               <div class="inputBox">
-                <el-checkbox-group v-model="checkShops" @change="shopAllCheck(key)">
+                <el-checkbox-group v-model="checkShops" @change="shopAllCheck(index)">
                   <el-checkbox :label="item" :key="item"></el-checkbox>
                 </el-checkbox-group>
               </div>
@@ -80,14 +79,14 @@
     <!-- 去结算底部导航 -->
     <div class="tabbar">
       <div class="inputBox">
-        <el-checkbox v-model="allCheck" @change="isAllCheck">全选</el-checkbox>
+        <el-checkbox v-model="allCheck" @change="CheckAllChange">全选</el-checkbox>
       </div>
       <div class="money">
         总计:
         <span style="font-weight:bold;">{{totalPayment|fMoney}}</span>
       </div>
       <div class="button">
-        <el-button type="danger" round>
+        <el-button type="danger" round :disabled="totalNum==0" @click="accounts">
           去结算
           <span>({{totalNum}}件)</span>
         </el-button>
@@ -128,46 +127,59 @@ export default {
       }
     },
     // 店铺全选操作
-    shopAllCheck(key) {
-      console.log(key);
+    shopAllCheck(index) {
       console.log(this.checkShops);
+      let a = this.checkShops.indexOf(this.shopNameArr[index]);
+      let arr = this.shopCart[this.shopNameArr[index]];
+      arr.forEach((item) => {
+        if (a != -1) {
+          if (
+            this.$refs.cart_data[index].goodsIdArr.indexOf(item.goods_id) == -1
+          ) {
+            this.$refs.cart_data[index].goodsIdArr.push(item.goods_id);
+            item.ischeck = 1;
+            this.$store.state.totalPayment += item.money_now * item.num * 1;
+            this.$store.state.totalNum += item.num * 1;
+          }
+        } else {
+          this.$refs.cart_data[index].goodsIdArr = [];
+          item.ischeck = 0;
+          this.$store.state.totalPayment += item.money_now * item.num * -1;
+          this.$store.state.totalNum += item.num * -1;
+        }
+      });
+      // 当前checkShops的长度是否等于所有店铺的长度
+      this.allCheck = this.checkShops.length === this.shopNameArr.length;
     },
     // 全选店铺操作
     CheckAllChange(val) {
-      console.log(val);
-      console.log(this.$parent);
-    },
-    // 全选的按钮是否被选中
-    is_check_shop_all() {
-      //   let car_data = this.$refs.cart_data;
-      //   let temp = 0;
-      //   car_data.forEach((i) => {
-      //     console.log(i.checkAll);
-      //     if (i.checkAll) {
-      //       temp++;
-      //     }
-      //   });
-      //   if (temp == car_data.length) {
-      //     this.allCheck = true;
-      //   }
-    },
-    // 是否全选所有商铺的商品
-    isAllCheck(val) {
-      this.allCheck = val;
-      let e = e || event;
-      let car_data = this.$refs.cart_data;
+      this.checkShops = val ? this.shopNameArr : [];
+      this.$refs.cart_data.forEach((item) => {
+        let label = item.$el.querySelectorAll(".el-checkbox");
+        if (val) {
+          label.forEach((text) => {
+            if (item.goodsIdArr.indexOf(text.innerText) == -1) {
+              item.goodsIdArr.push(text.innerText);
+            }
+          });
+        } else {
+          item.goodsIdArr = [];
+        }
+      });
       this.$store.state.totalPayment = val
         ? this.$store.state.shopCarMoneyAll
         : 0;
       this.$store.state.totalNum = val ? this.$store.state.shopCarNumAll : 0;
-      car_data.forEach((i) => {
-        i.checkAll = val ? true : false;
-        // this.shopCart[i.shopName].forEach((j) => {
-        //   j.ischeck = Number(e.target.checked).toString();
-        // });
-      });
-      console.log(this.shopCart);
     },
+    // 去结算 操作
+    accounts() {
+      if (this.userInfo) {
+        this.jumpPage("/accounts");
+      } else {
+        this.jumpPage("/login");
+      }
+    },
+    //
     // 点击规格发生的事件
     selectNorm(obj) {
       console.log(obj);
@@ -234,8 +246,7 @@ export default {
     dl {
       background-color: #fff;
       border-radius: 5px;
-      dt,
-      dd {
+      dt {
         display: flex;
         padding: 15px;
         font-size: 12px;
@@ -243,6 +254,10 @@ export default {
         .inputBox {
           flex: 1;
           height: auto;
+          label {
+            width: 23px;
+            overflow: hidden;
+          }
         }
       }
       dt {
@@ -294,6 +309,9 @@ export default {
     .el-button {
       padding: 12px 30px;
       background-color: red;
+    }
+    .is-disabled {
+      background-color: #fab6b6;
     }
   }
 }

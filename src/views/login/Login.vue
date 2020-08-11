@@ -39,10 +39,11 @@
         <el-button type="danger" @click="userClick" v-if="phoneName && password">登录</el-button>
         <el-button type="danger" v-else disabled>登录</el-button>
       </div>
-      <el-button type="danger" plain @click="yjdl">一键登录</el-button>
+      <el-button type="danger" plain @click="popUpBox('暂不支持!','使用此功能，请安装最新版京东APP','warning')">一键登录</el-button>
       <p>
-        <span class="left" @click="isPhoneLogin = !isPhoneLogin">账号密码登录</span>
-        <span class="right">手机快速注册</span>
+        <span class="left" v-if="isPhoneLogin" @click="isPhoneLogin = !isPhoneLogin">账号密码登录</span>
+        <span class="left" v-else @click="isPhoneLogin = !isPhoneLogin">短信验证码登录</span>
+        <span class="right" @click="jumpPage('/r')">手机快速注册</span>
       </p>
       <div class="striping">
         <h4>其他方式</h4>
@@ -58,7 +59,8 @@
         </a>
       </p>
       <p>
-        未注册的手机号验证后将自动创建京东账号, 登录即代表您已同意
+        <span v-if="isPhoneLogin">未注册的手机号验证后将自动创建京东账号, 登录即代表您已同意</span>
+        <span v-else>登录即代表您已同意</span>
         <a href="//in.m.jd.com/help/app/private_policy.html">京东隐私政策</a>
       </p>
     </div>
@@ -67,6 +69,8 @@
 
 <script>
 import navBar from "components/common/navbar/NavBar";
+import { login, land, isPhone } from "network";
+import { haveData } from "common/common.js";
 export default {
   name: "Login",
   data() {
@@ -85,7 +89,9 @@ export default {
     navBar,
   },
   computed: {},
-  created() {},
+  created() {
+    console.log(this.$store.state.userInfo);
+  },
   mounted() {},
   methods: {
     changeRegion() {
@@ -94,7 +100,6 @@ export default {
     changeValue() {
       let res = /^1[3|4|5|7|8][0-9]{9}$/;
       if (this.phone && this.phone.length == 11 && res.test(this.phone)) {
-        console.log("手机号正确了");
         this.isCodeDisable = false;
       } else {
         this.isCodeDisable = true;
@@ -106,22 +111,56 @@ export default {
       }
     },
     // 一键登录点击事件
-    yjdl() {
+    popUpBox(t, m, ty) {
       this.$notify({
-        title: "暂不支持!",
-        message: "使用此功能，请安装最新版京东APP",
-        type: "warning",
-        // offset: 330,
+        title: t,
+        message: m,
+        type: ty,
       });
     },
-    // 登录的点击事件
+    // 验证码登录的点击事件
     loginClick() {
-      if (this) console.log(this.phone);
-      console.log(this.code);
+      if (this.code == "123123") {
+        console.log("验证码正确");
+        haveData(isPhone, this.phone, (res) => {
+          console.log(res);
+          if (res.code != 200) {
+            // 直接登录然后跳转
+            this.jumpPage("/home");
+          } else {
+            // 先注册然后直接登录
+            let data = {
+              action: "shortmsg",
+              phone: this.phone,
+              userName: "",
+              pwd: "",
+              email: "",
+            };
+            haveData(land, data, (res) => {
+              console.log(res);
+              if (res.code != 200) return;
+              // 直接登录然后跳转
+              this.jumpPage("/home");
+            });
+          }
+        });
+      } else {
+        this.popUpBox("验证码错误", "请输入正确的验证码", "error");
+      }
     },
+    // 密码登录的点击事件
     userClick() {
-      console.log(this.phoneName);
-      console.log(this.password);
+      let obj = {
+        action: "account",
+        uName: this.phoneName,
+        pwd: this.password,
+      };
+      haveData(login, obj, (res) => {
+        if (res.code != 200) return;
+        this.$store.state.userInfo = res.data;
+        localStorage.user = JSON.stringify(res.data);
+        this.jumpPage("/home");
+      });
     },
   },
 };
@@ -188,8 +227,16 @@ export default {
 </style>
 
 <style lang='less'>
-.el-notification__title {
-  text-align: left;
+.el-notification {
+  width: 92%;
+  background-color: black;
+  .el-notification__title {
+    text-align: left;
+    color: white;
+  }
+  .el-notification__content {
+    color: white;
+  }
 }
 .el-input {
   width: 72%;

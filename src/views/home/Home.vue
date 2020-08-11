@@ -62,16 +62,16 @@ import goodsTitle from "components/content/goods/GoodsTitle";
 import homeRotation from "./childComp/homeRotation";
 import homeFeature from "./childComp/homeFeature";
 // 引入其他文件
-import { getHomeBanner, getHomeFeature } from "network/home";
+import { getHomeBanner, getHomeFeature } from "network";
 import { debounce } from "common/utils";
-import { getBanner, getFeature, getSearchGoods } from "common/common";
+import { noData, haveData, getFeature } from "common/common";
 import { getGoods } from "network/goods.js";
 
 export default {
   name: "Home",
   created() {
     // 网络请求
-    getBanner(getHomeBanner, (res) => {
+    noData(getHomeBanner, (res) => {
       this.banners = res.data;
     });
     getFeature(getHomeFeature, 10, (res, data) => {
@@ -126,7 +126,8 @@ export default {
         page: this.goods[type].page + 1,
         pagesize: 10,
       };
-      getSearchGoods(getGoods, data, (res) => {
+      haveData(getGoods, data, (res) => {
+        if (res.code != 200) return;
         this.goods[type].page += 1;
         this.goods[type].list.push(...res.data);
         console.log(this.goods[type].list);

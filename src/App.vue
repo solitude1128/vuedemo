@@ -7,23 +7,50 @@
     <keep-alive :exclude="$store.state.keepExclude">
       <router-view />
     </keep-alive>
-
-    <main-tabbar v-if="$store.state.TabBar.isJdTabBar"></main-tabbar>
-    <jx-tabbar v-if="$store.state.TabBar.isJxTabBar"></jx-tabbar>
+    <jd-tabbar v-if="isJdTabBar"></jd-tabbar>
+    <jx-tabbar v-if="isJxTabBar"></jx-tabbar>
   </div>
 </template>
 
 <script>
-import MainTabbar from "components/content/mainTabbar/MainTabbar";
-import jxTabbar from "components/content/jxTabbar/JxTabbar";
+import jdTabbar from "components/content/mainTabbar/JdTabbar";
+import jxTabbar from "components/content/mainTabbar/JxTabbar";
+import { requestCity } from "network/request";
 export default {
   name: "App",
-  data() {
-    return {};
+  created() {
+    requestCity().then((res) => {
+      // 如果没有用户登录,则配送地址为获取的地址
+      if (!this.user) {
+        console.log("没用户")
+        this.$store.state.address = eval(
+          "(" + res.slice(res.indexOf("=") + 1, res.length - 1) + ")"
+        ).cname;
+      }
+      // 默认城市为获取的地址
+      this.$store.state.address = eval(
+        "(" + res.slice(res.indexOf("=") + 1, res.length - 1) + ")"
+      ).cname;
+    });
   },
   components: {
-    MainTabbar,
+    jdTabbar,
     jxTabbar,
+  },
+  computed: {
+    isJdTabBar() {
+      return this.$store.state.TabBar.isJdTabBar;
+    },
+    isJxTabBar() {
+      return this.$store.state.TabBar.isJxTabBar;
+    },
+    user() {
+      return (
+        this.$store.state.userInfo != "" &&
+        this.$store.state.userInfo != null &&
+        this.$store.state.userInfo != undefined
+      );
+    },
   },
 };
 </script>

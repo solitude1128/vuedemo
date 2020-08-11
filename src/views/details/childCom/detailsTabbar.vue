@@ -15,7 +15,6 @@
 <script>
 export default {
   name: "detailsTabbar",
-  created() {},
   data() {
     return {
       tabObj: [
@@ -29,12 +28,6 @@ export default {
       ],
     };
   },
-  components: {},
-  methods: {},
-  computed: {},
-  mounted() {},
-  activated() {},
-  deactivated() {},
 };
 </script>
 <style lang='less' scoped>

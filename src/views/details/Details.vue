@@ -175,8 +175,8 @@ import detailsShop from "components/common/detailsShop/DetailsShop";
 import detailsBaseInfo from "./childCom/detailsBaseInfo";
 import detailsTabbar from "./childCom/detailsTabbar";
 
-import { getSearchGoods } from "common/common";
-import { getGoodsId } from "network/goods.js";
+import { haveData } from "common/common";
+import { getGoodsDet } from "network";
 export default {
   name: "Details",
   created() {
@@ -210,8 +210,8 @@ export default {
   },
   methods: {
     getDgoods(id) {
-      getSearchGoods(getGoodsId, id, (res) => {
-        console.log(res.data);
+      haveData(getGoodsDet, id, (res) => {
+        if (res.code != 200) return;
         this.detailsGoods = res.data.goodsData;
         console.log(this.detailsGoods);
       });

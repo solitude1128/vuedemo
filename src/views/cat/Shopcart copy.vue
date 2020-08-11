@@ -48,33 +48,15 @@
             <el-button @click="jumpPage('/login')" type="danger" round>登录</el-button>
           </p>
         </div>
-        <div v-for="(item,key) in shopNameArr" :key="key">
-          <!-- <dl v-if="shopCart[item]"> -->
-          <dl>
-            <dt>
-              <div class="inputBox">
-                <el-checkbox-group v-model="checkShops" @change="shopAllCheck(key)">
-                  <el-checkbox :label="item" :key="item"></el-checkbox>
-                </el-checkbox-group>
-              </div>
-              <div class="leftR">
-                <span>
-                  <i class="el-icon-s-shop"></i>
-                  <span>&nbsp;{{item}}</span>
-                </span>
-              </div>
-              <div class="rightR">
-                <span>
-                  <i class="el-icon-warning-outline"></i>
-                  需支付运费
-                </span>
-                |
-                <span class="yhq">优惠券</span>
-              </div>
-            </dt>
-            <cart-data ref="cart_data" :shopName="item"></cart-data>
-          </dl>
-        </div>
+        
+        <cart-data
+          v-for="(i,key) in shopCart"
+          :key="key"
+          :shopName="key"
+          ref="cart_data"
+          @checknorm="selectNorm"
+          @ischeckshopall="is_check_shop_all"
+        ></cart-data>
       </div>
     </scroll>
     <!-- 去结算底部导航 -->
@@ -107,7 +89,6 @@ export default {
   data() {
     return {
       allCheck: false,
-      checkShops: [],
     };
   },
   components: {
@@ -127,29 +108,19 @@ export default {
         this.$refs.shopScroll.scrollTo(0, 0, 100);
       }
     },
-    // 店铺全选操作
-    shopAllCheck(key) {
-      console.log(key);
-      console.log(this.checkShops);
-    },
-    // 全选店铺操作
-    CheckAllChange(val) {
-      console.log(val);
-      console.log(this.$parent);
-    },
     // 全选的按钮是否被选中
     is_check_shop_all() {
-      //   let car_data = this.$refs.cart_data;
-      //   let temp = 0;
-      //   car_data.forEach((i) => {
-      //     console.log(i.checkAll);
-      //     if (i.checkAll) {
-      //       temp++;
-      //     }
-      //   });
-      //   if (temp == car_data.length) {
-      //     this.allCheck = true;
-      //   }
+      let car_data = this.$refs.cart_data;
+      let temp = 0;
+      car_data.forEach((i) => {
+        console.log(i.checkAll);
+        if (i.checkAll) {
+          temp++;
+        }
+      });
+      if (temp == car_data.length) {
+        this.allCheck = true;
+      }
     },
     // 是否全选所有商铺的商品
     isAllCheck(val) {
@@ -188,9 +159,6 @@ export default {
         ? this.$store.state.userInfo[0]
         : this.$store.state.userInfo;
     },
-    shopNameArr() {
-      return this.$store.state.shopNameArr;
-    },
   },
   filters: {
     fMoney(msg) {
@@ -228,45 +196,6 @@ export default {
         margin: 0;
         .el-button {
           padding: 8px 16px;
-        }
-      }
-    }
-    dl {
-      background-color: #fff;
-      border-radius: 5px;
-      dt,
-      dd {
-        display: flex;
-        padding: 15px;
-        font-size: 12px;
-        margin: 0;
-        .inputBox {
-          flex: 1;
-          height: auto;
-        }
-      }
-      dt {
-        .inputBox {
-          flex: 1;
-          height: auto;
-        }
-        .leftR {
-          flex: 4;
-          text-align: left;
-          font-weight: bold;
-          i {
-            font-size: 14px;
-          }
-        }
-        .rightR {
-          text-align: right;
-          flex: 4;
-          .yhq {
-            background-color: rgb(253, 213, 213);
-            color: red;
-            border-radius: 20px;
-            padding: 2px 5px;
-          }
         }
       }
     }

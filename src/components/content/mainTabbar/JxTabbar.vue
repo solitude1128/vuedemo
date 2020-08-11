@@ -11,7 +11,8 @@
 <script>
 import tabBar from "components/common/tabbar/TabBar";
 import tabBarItem from "components/common/tabbar/TabBarItem";
-import * as base from "network/jxTabbar";
+import { getJxTabBar } from "network";
+import { noData } from "common/common";
 export default {
   name: "JxTabbar",
   components: {
@@ -24,14 +25,9 @@ export default {
     };
   },
   mounted() {
-    this.getTabbar();
-  },
-  methods: {
-    getTabbar() {
-      base.getjxTabBar().then((res) => {
-        this.tabbar = res.data;
-      });
-    },
+    noData(getJxTabBar, (res) => {
+      this.tabbar = res.data;
+    });
   },
 };
 </script>

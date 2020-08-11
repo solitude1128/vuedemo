@@ -71,10 +71,9 @@ import Scroll from "components/content/scroll/Scroll";
 import goodsList from "components/content/goods/GoodsList";
 import goodsTitle from "components/content/goods/GoodsTitle";
 // 引入其他文件
-import { getjxBanner, getjxFeature } from "network/surprise";
+import { getjxBanner, getGoods, getjxFeature } from "network";
 import { debounce } from "common/utils";
-import { getGoods } from "network/goods";
-import { getBanner, getFeature, getSearchGoods } from "common/common";
+import { noData, getFeature, haveData } from "common/common";
 
 export default {
   name: "Surprise",
@@ -109,7 +108,7 @@ export default {
     };
   },
   created() {
-    getBanner(getjxBanner, (res) => {
+    noData(getjxBanner, (res) => {
       this.jxBanners = res.data;
     });
     getFeature(getjxFeature, 10, (res, data) => {
@@ -122,7 +121,8 @@ export default {
       let data = {
         page: this.goods[type].page + 1,
       };
-      getSearchGoods(getGoods, data, (res) => {
+      haveData(getGoods, data, (res) => {
+        if (res.code != 200) return;
         this.goods[type].page += 1;
         this.goods[type].list.push(...res.data);
         this.$refs.scrollCom.scroll.finishPullUp();

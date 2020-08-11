@@ -1,76 +1,88 @@
 <template>
   <div id="profile">
-    <!-- 导航 -->
-    <nav-bar class="pf-nav-bar">
-      <div slot="left" @click="jumpPage('/home')">
-        <i class="el-icon-arrow-left"></i>
-      </div>
-      <div slot="center">我的京东</div>
-      <div slot="right">
-        <el-dropdown trigger="click" @command="pushRouter">
-          <span class="el-dropdown-link">
-            <i class="el-icon-more"></i>
+    <scroll
+      class="profile-content"
+      :probeType="3"
+      @parentScroll="pScroll"
+      :pull-up-load="true"
+      ref="pScroll"
+    >
+      <!-- 导航 -->
+      <nav-bar class="pf-nav-bar">
+        <div slot="left" @click="jumpPage('/home')">
+          <i class="el-icon-arrow-left"></i>
+        </div>
+        <div slot="center">我的京东</div>
+        <div slot="right">
+          <el-dropdown trigger="click" @command="pushRouter">
+            <span class="el-dropdown-link">
+              <i class="el-icon-more"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="/home" icon="el-icon-s-home">首页</el-dropdown-item>
+              <el-dropdown-item command="/category" divided icon="el-icon-menu">分类搜索</el-dropdown-item>
+              <el-dropdown-item command="/shopCar" divided icon="el-icon-shopping-cart-2">购物车</el-dropdown-item>
+              <el-dropdown-item command="/my" divided icon="el-icon-user">我的京东</el-dropdown-item>
+              <el-dropdown-item command="/category" divided icon="el-icon-s-order">浏览记录</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
+      </nav-bar>
+      <!-- 导航背景 -->
+      <div class="navbg">
+        <el-avatar
+          class="toux"
+          src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1595926082386&di=f12c16e500b5e0de2071023e10eb46cd&imgtype=0&src=http%3A%2F%2Ftupian.qqw21.com%2Farticle%2FUploadPic%2F2020-6%2F2020617225141628.jpg"
+        ></el-avatar>
+        <div class="myname">
+          <!-- <span>{{userInfo.tel}}</span> -->
+          <span>
+            啊啊啊啊啊
+            <span class="el-icon-edit-outline"></span>
           </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="/home" icon="el-icon-s-home">首页</el-dropdown-item>
-            <el-dropdown-item command="/category" divided icon="el-icon-menu">分类搜索</el-dropdown-item>
-            <el-dropdown-item command="/shopCar" divided icon="el-icon-shopping-cart-2">购物车</el-dropdown-item>
-            <el-dropdown-item command="/my" divided icon="el-icon-user">我的京东</el-dropdown-item>
-            <el-dropdown-item command="/category" divided icon="el-icon-s-order">浏览记录</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+          <p v-if="userInfo">用户名:{{userInfo.name}}</p>
+        </div>
       </div>
-    </nav-bar>
-
-    <!-- 导航背景 -->
-    <div class="navbg">
-      <el-avatar
-        class="toux"
-        src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1595926082386&di=f12c16e500b5e0de2071023e10eb46cd&imgtype=0&src=http%3A%2F%2Ftupian.qqw21.com%2Farticle%2FUploadPic%2F2020-6%2F2020617225141628.jpg"
-      ></el-avatar>
-      <div class="myname">
-        <span>我是昵称</span>
-        <p>用户名:123456789</p>
+      <div class="myCell">
+        <a v-for="(i,index) in cellArr" :key="index">
+          <img :src="i.img" width="20%" />
+          <p>{{i.name}}</p>
+        </a>
       </div>
-    </div>
-
-    <div class="myCell">
-      <a v-for="(i,index) in cellArr" :key="index">
-        <img :src="i.img" width="20%" />
-        <p>{{i.name}}</p>
-      </a>
-    </div>
-    <div class="myCell">
-      <a v-for="(i,index) in cellArr2" :key="index">
-        <p class="red">{{i.name}}</p>
-        <img
-          v-if="i.name == ''"
-          src="https://img11.360buyimg.com/jdphoto/s40x40_jfs/t20329/11/1228908740/243/73a7934c/5b235f37Ne85fdb85.png"
-          width="15%"
-        />
-        <p>{{i.text}}</p>
-      </a>
-    </div>
-    <div class="myCell">
-      <a v-for="(i,index) in cellArr3" :key="index">
-        <span>{{i.count}}</span>
-        <p>{{i.text}}</p>
-      </a>
-    </div>
-    <div class="myCell">
-      <a class="bfb" v-for="(i,index) in cellArr4" :key="index">
-        <img :src="i.img" width="20%" />
-        <p>{{i.text}}</p>
-      </a>
-    </div>
-    <p class="khfw">
-      <span>客户服务</span>
-      <i class="el-icon-arrow-right"></i>
-    </p>
+      <div class="myCell">
+        <a v-for="(i,index) in cellArr2" :key="index">
+          <p class="red">{{i.name}}</p>
+          <img
+            v-if="i.name == ''"
+            src="https://img11.360buyimg.com/jdphoto/s40x40_jfs/t20329/11/1228908740/243/73a7934c/5b235f37Ne85fdb85.png"
+            width="15%"
+          />
+          <p>{{i.text}}</p>
+        </a>
+      </div>
+      <div class="myCell">
+        <a v-for="(i,index) in cellArr3" :key="index">
+          <span>{{i.count}}</span>
+          <p>{{i.text}}</p>
+        </a>
+      </div>
+      <div class="myCell">
+        <a class="bfb" v-for="(i,index) in cellArr4" :key="index">
+          <img :src="i.img" width="20%" />
+          <p>{{i.text}}</p>
+        </a>
+      </div>
+      <p class="khfw">
+        <span>客户服务</span>
+        <i class="el-icon-arrow-right"></i>
+      </p>
+      <p style="height:500px"></p>
+    </scroll>
   </div>
 </template>
 <script>
 import navBar from "components/common/navbar/NavBar";
+import Scroll from "components/content/scroll/Scroll";
 export default {
   name: "Profile",
   data() {
@@ -117,6 +129,8 @@ export default {
         {
           name: "",
           text: "我的资产",
+          img:
+            "https://img11.360buyimg.com/jdphoto/s40x40_jfs/t20329/11/1228908740/243/73a7934c/5b235f37Ne85fdb85.png",
         },
       ],
       cellArr3: [
@@ -170,80 +184,99 @@ export default {
           text: "闲置换钱",
         },
       ],
-      userId: null,
     };
   },
   components: {
     navBar,
+    Scroll,
   },
   created() {
-    this.userInfo = this.$store.state.userInfo;
     console.log(this.userInfo);
-    if (!this.userId) this.jumpPage("/login");
+    if (!this.userInfo) this.jumpPage("/login");
   },
   methods: {
     pushRouter(path) {
       this.$router.push(path);
+    },
+    pScroll(position) {
+      if (position.y >= 0) {
+        this.$refs.pScroll.scrollTo(0, 0, 100);
+      }
+    },
+  },
+  computed: {
+    userInfo() {
+      return this.$store.state.userInfo
+        ? this.$store.state.userInfo[0]
+        : this.$store.state.userInfo;
     },
   },
 };
 </script>
 
 <style lang="less" scoped>
-.pf-nav-bar {
-  background-color: #fff;
-}
-.el-dropdown-menu {
-  text-align: left;
-}
-.navbg {
-  background-image: linear-gradient(90deg, #eb3c3c, #ff7459);
-  position: relative;
-  color: #fff;
-  .toux {
-    position: absolute;
-    left: 19%;
-    top: 10%;
-    width: 60px;
-    height: 60px;
+.profile-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 50px;
+  .pf-nav-bar {
+    position: relative;
+    background-color: #fff;
   }
-  .myname {
-    position: absolute;
-    left: 33%;
-    top: 12%;
+  .el-dropdown-menu {
     text-align: left;
-    p {
-      margin: 5px 0;
+  }
+  .navbg {
+    background-image: linear-gradient(90deg, #eb3c3c, #ff7459);
+    position: relative;
+    color: #fff;
+    .toux {
+      position: absolute;
+      left: 19%;
+      top: 10%;
+      width: 60px;
+      height: 60px;
+    }
+    .myname {
+      position: absolute;
+      left: 33%;
+      top: 12%;
+      text-align: left;
+      p {
+        margin: 5px 0;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.733);
+      }
+    }
+  }
+  .myCell {
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+    overflow: hidden;
+    margin: 15px 0;
+    padding-top: 10px;
+    background-color: #fff;
+    a {
+      flex: 1;
       font-size: 12px;
+      .red {
+        color: #e93b3d;
+      }
+    }
+    a.bfb {
+      flex: none;
+      width: 25%;
     }
   }
-}
-.myCell {
-  display: flex;
-  flex-wrap: wrap;
-  text-align: center;
-  overflow: hidden;
-  margin: 15px 0;
-  padding-top: 10px;
-  background-color: #fff;
-  a {
-    flex: 1;
-    font-size: 12px;
-    .red {
-      color: #e93b3d;
+  .khfw {
+    padding: 10px;
+    background-color: #fff;
+    text-align: left;
+    i {
+      float: right;
     }
-  }
-  a.bfb {
-    flex: none;
-    width: 25%;
-  }
-}
-.khfw {
-  padding: 10px;
-  background-color: #fff;
-  text-align: left;
-  i {
-    float: right;
   }
 }
 </style>

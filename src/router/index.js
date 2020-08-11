@@ -66,6 +66,14 @@ const routes = [
         }
     },
     {
+        path: "/r",
+        name: "Register",
+        component: () => import("views/register/Register"),
+        meta: {
+            title: "注册"
+        }
+    },
+    {
         path: "/jx",
         name: "Surprise",
         component: () => import("views/surprise/Surprise"),
@@ -122,8 +130,10 @@ const routers = new VueRouter({
     mode: "history"
 })
 routers.beforeEach((to, from, next) => {
+    // 每次路由在执行的时候,记录一下进入页面的路由地址,后期用于判断tabbar被重复点击
+    store.state.redundancy = to.path
+    if (to.path == from.path) return
     document.title = to.matched[0].meta.title
-    console.log(to, from);
     for (let i in store.state.TabBar) {
         store.state.TabBar[i] = false
     }

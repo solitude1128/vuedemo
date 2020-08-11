@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: "TabBar"
+  name: "TabBar",
 };
 </script>
 
@@ -21,5 +21,7 @@ export default {
   bottom: 0;
   background-color: #fff;
   border-top: 1px solid rgb(200, 200, 200);
+  box-shadow: 0 -1px 10px #e4e4e4;
+  z-index: 999;
 }
 </style>

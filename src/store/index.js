@@ -13,18 +13,19 @@ const st = {
         isJxTabBar: false
     },
     // 用户名
-    userInfo: '',
+    userInfo: localStorage.user ? JSON.parse(localStorage.user) : null,
     keepExclude: "Details,Cart",
     path: "http://106.12.85.17:8090/public/image",
-    shopCart: {
-        jd: [],
-        shop1: [],
-        shop2: [],
-        shop3: [],
-    },
-    shopCartLen: 0,//购物车的数据数量
     loginRecords: '',//进入login的记录
-    address: ""
+    address: "",//配送地址
+    redundancy: null,//用于记录tabbar的上次路由路径
+    shopCart: {},//购物车商品数据
+    shopCartLen: 0,//购物车的数据数量
+    totalPayment: 0,//支付总价
+    totalNum: 0,//支付数量
+    shopCarMoneyAll: 0,//记录购物车所有商品价钱总和
+    shopCarNumAll: 0,//记录购物车商品总数量
+    shopNameArr:[],//商铺名字的数组
 }
 
 const x = new Vuex.Store({

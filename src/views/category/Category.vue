@@ -43,7 +43,7 @@
           </dt>
           <dd>
             <a v-for="(i,key) in historyData" :key="key" @click="saveData(i)">
-              <img :src="categorySrc+i.c3_img" width="50%" @load="cImageLoad" />
+              <img :src="path+'/jd_category/'+i.c3_img" width="50%" @load="cImageLoad" />
               <p>{{i.c3_name}}</p>
             </a>
           </dd>
@@ -60,7 +60,7 @@
           </dt>
           <dd>
             <a v-for="(i,key) in secMenuList" :key="key" @click="saveData(i)">
-              <img :src="categorySrc+i.c3_img" width="50%" @load="cImageLoad" />
+              <img :src="path+'/jd_category/'+i.c3_img" width="50%" @load="cImageLoad" />
               <p>{{i.c3_name}}</p>
             </a>
           </dd>
@@ -72,7 +72,7 @@
           <dt>{{index}}</dt>
           <dd>
             <a v-for="(i,key) in item" :key="key" @click="saveData(i)">
-              <img :src="categorySrc+i.c3_img" width="50%" @load="cImageLoad" />
+              <img :src="path+'/jd_category/'+i.c3_img" width="50%" @load="cImageLoad" />
               <p>{{i.c3_name}}</p>
             </a>
           </dd>
@@ -86,8 +86,13 @@ import Scroll from "components/content/scroll/Scroll";
 import TabControl from "components/content/tabControl/TabControl";
 import TabContent from "components/content/tabContent/TabContent";
 import navBar from "components/common/navbar/NavBar";
-import * as base from "network/jd_category";
+import {
+  getJdCategoryOne,
+  getJdCategoryTwo,
+  getJdCategoryThree,
+} from "network";
 import { debounce } from "common/utils";
+import { noData } from "common/common";
 
 export default {
   name: "Category",
@@ -100,7 +105,6 @@ export default {
   data() {
     return {
       input: "",
-      categorySrc: "http://106.12.85.17:8090/public/image/jd_category/",
       oneData: [],
       twoData: [],
       threeData: [],
@@ -181,7 +185,7 @@ export default {
       const refresh = debounce(this.$refs.two.refresh, 1000);
       refresh();
     },
-    contentScroll(){
+    contentScroll() {
       console.log("twoScroll");
     },
     saveData(a) {
@@ -204,25 +208,29 @@ export default {
       }
       console.log(this.historyData);
       localStorage.historyData = JSON.stringify(this.historyData);
-      this.jumpPage("/search/" + a.c3_id)
+      this.jumpPage("/search/" + a.c3_id);
     },
     //网络请求
     getJdCategoryOne() {
-      base.getJdCategoryOne().then((res) => {
-        if (res.data) this.oneData = res.data;
+      noData(getJdCategoryOne, (res) => {
+        this.oneData = res.data;
       });
     },
     getJdCategoryTwo() {
-      base.getJdCategoryTwo().then((res) => {
-        if (res.data) this.twoData = res.data;
+      noData(getJdCategoryTwo, (res) => {
+        this.twoData = res.data;
       });
     },
     getJdCategoryThree() {
-      base.getJdCategoryThree().then((res) => {
-        if (res.code != 200) return;
+      noData(getJdCategoryThree, (res) => {
         this.threeData = res.data;
         this.tcClick(this.oneIndex);
       });
+    },
+  },
+  computed: {
+    path() {
+      return this.$store.state.path;
     },
   },
 };

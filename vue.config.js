@@ -11,6 +11,18 @@ module.exports = {
                 "common": "@/common",//common指的是公共文件夹
             }
         },
-        plugins:[]
+        // 对服务运行添加代理服务
+        devServer: {
+            proxy: {//代理
+                '/api': {
+                    target: "http://pv.sohu.com",//接口的域名,注意这里是域名,不是完整的IP
+                    changeOrigin: true,
+                    ws: true,
+                    pathRewrite: {
+                        '^/api': ''
+                    }
+                }
+            }
+        }
     }
 }

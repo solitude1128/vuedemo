@@ -21,16 +21,11 @@ li {
 #surprise,
 #details,
 #allF,
-#shopcart {
+#shopcart,
+#profile {
   position: relative;
   height  : 100vh;
   overflow: hidden;
-}
-
-#profile {
-  height     : 100vh;
-  overflow   : hidden;
-  padding-top: 50px;
 }
 
 .navbg {

@@ -8,7 +8,8 @@
 </template>
 
 <script>
-import * as base from "network/mainTabbar";
+import { getJdTabBar } from "network";
+import { noData } from "common/common";
 import tabBar from "components/common/tabbar/TabBar";
 import tabBarItem from "components/common/tabbar/TabBarItem";
 export default {
@@ -62,15 +63,10 @@ export default {
       path: "http://106.12.85.17:9091/",
     };
   },
-  mounted() {
-    this.getTabbar();
-  },
-  methods: {
-    getTabbar() {
-      base.getTabBar().then((res) => {
-        console.log(res);
-      });
-    },
+  created() {
+    noData(getJdTabBar, (res) => {
+      console.log(res);
+    });
   },
 };
 </script>

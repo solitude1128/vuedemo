@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     itemClick() {
-      console.log(this.path)
+      if (this.path == this.$store.state.redundancy) return;
       this.$router.replace(this.path);
     },
   },

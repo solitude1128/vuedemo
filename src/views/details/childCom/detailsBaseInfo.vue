@@ -13,7 +13,6 @@
 <script>
 export default {
   name: "detailsBaseInfo",
-  created() {},
   data() {
     return {
       goodsInfo: {
@@ -24,12 +23,6 @@ export default {
       },
     };
   },
-  components: {},
-  methods: {},
-  computed: {},
-  mounted() {},
-  activated() {},
-  deactivated() {},
 };
 </script>
 <style lang='less' scoped>

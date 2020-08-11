@@ -33,7 +33,7 @@
           <!-- <img
             src="//m.360buyimg.com/mobilecms/s80x80_jfs/t1/110682/29/897/4880/5e7344b3E8fb10394/9c44e06113d83d21.png.webp"
             width="50%"
-          /> -->
+          />-->
           <p>{{j.Title}}</p>
         </dd>
       </dl>
@@ -44,13 +44,29 @@
 <script>
 import navBar from "components/common/navbar/NavBar";
 import Scroll from "components/content/scroll/Scroll";
-import { getHomeFeature } from "network/home";
-import { getAllFeature } from "common/common";
+import { getHomeFeature } from "network";
+import { haveData } from "common/common";
 export default {
   name: "AllFeature",
   created() {
-    getAllFeature(getHomeFeature, (res, data) => {
-      this.allData = data;
+    haveData(getHomeFeature, 0, (res) => {
+      if (res.code != 200) return;
+      let obj = {
+        推荐: [],
+        "3C专区": [],
+        超市生活: [],
+        时尚穿搭: [],
+        特色频道: [],
+      };
+      res.data.forEach((i) => {
+        //循环的是所有数据
+        if (obj[i.classify]) {
+          obj[i.classify].push(i);
+        } else {
+          obj[i.classify] = [i];
+        }
+      });
+      this.allData = obj;
       console.log(this.allData);
     });
   },
@@ -68,9 +84,6 @@ export default {
       this.jumpPage(path);
     },
   },
-  computed: {},
-  mounted() {},
-  deactivated() {},
 };
 </script>
 <style lang='less' scoped>

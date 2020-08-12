@@ -21,13 +21,6 @@ export default {
   created() {
     requestCity().then((res) => {
       // 如果没有用户登录,则配送地址为获取的地址
-      if (!this.user) {
-        console.log("没用户")
-        this.$store.state.address = eval(
-          "(" + res.slice(res.indexOf("=") + 1, res.length - 1) + ")"
-        ).cname;
-      }
-      // 默认城市为获取的地址
       this.$store.state.address = eval(
         "(" + res.slice(res.indexOf("=") + 1, res.length - 1) + ")"
       ).cname;

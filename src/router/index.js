@@ -122,11 +122,11 @@ const routes = [
         },
     },
     {
-        path: "/accounts",
+        path: "/accounts/:shopId",//暂时直接传递商品数据
         name: "Accounts",
         component: () => import("views/accounts/Accounts"),
         meta: {
-            title: "结算页面"
+            title: "确认订单"
         },
     },
 ]

@@ -57,10 +57,15 @@
 export default {
   name: "cartData",
   created() {
+    this.temp = 0;
     for (let i in this.cartdata) {
       if (this.cartdata[i].ischeck == 1) {
+        this.temp++;
         this.goodsIdArr.push(this.cartdata[i].goods_id);
       }
+    }
+    if (this.temp == this.cartdata.length) {
+      this.$parent.$parent.checkShops.push(this.shopName);
     }
   },
   props: {
@@ -72,6 +77,7 @@ export default {
   data() {
     return {
       goodsIdArr: [],
+      temp: 0,
     };
   },
   methods: {

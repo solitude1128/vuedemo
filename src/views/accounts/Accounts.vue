@@ -14,6 +14,7 @@
         </div>
         <div slot="center">确认订单</div>
       </nav-bar>
+      {{order}}
       <!-- 配送地址 -->
       <div class="address">
         <div>
@@ -27,6 +28,26 @@
           <i class="el-icon-arrow-right"></i>
         </span>
       </div>
+      <!-- 订单展示 -->
+      <order-shop v-for="(i,key) in order" :key="key" :shop="i">
+        <div>
+          <strong slot="header">
+            <i class="el-icon-s-shop"></i>
+            {{key}}
+            {{i}}
+          </strong>
+          <!-- <div v-for="(j,index) in order[key]  ::key="index"">
+            <img
+              slot="imgBox"
+              src="http://106.12.85.17:8090/public/image/goods/jd_wjyq_synl5_cover1.jpg"
+              width="100%"
+            />
+            <div slot="shopBox">
+              <p>{{i.}}</p>
+            </div>
+          </div>-->
+        </div>
+      </order-shop>
     </scroll>
   </div>
 </template>
@@ -34,25 +55,65 @@
 <script>
 import navBar from "components/common/navbar/NavBar";
 import Scroll from "components/content/scroll/Scroll";
+import orderShop from "./childCom/orderShop";
 export default {
   name: "Accounts",
   created() {
     if (!this.userInfo) {
       this.jumpPage("/login");
     }
+    this.convert();
   },
   data() {
-    return {};
+    return {
+      order: {},
+    };
   },
   components: {
     navBar,
     Scroll,
+    orderShop,
   },
   methods: {
     aScroll(position) {
       if (position.y >= 0) {
         this.$refs.accScroll.scrollTo(0, 0, 100);
       }
+    },
+    convert() {
+      // ----------------第一种方法-----------------
+      // let arr = [],
+      //   dest = [];
+      // this.orderData.forEach((i) => {
+      // // 如果在arr里没查着就往里push个对象
+      //   if (arr.indexOf(i.shop_name) === -1) {
+      //     dest.push({
+      //       [i.shop_name]: [i],
+      //     });
+      //     arr.push(i.shop_name);
+      //   } else {
+      // // 否则如果查着了就判断dest里是否有重复的key,如果有重复的键并且此键的数组里面没有即将要添加的数据就往里push,然后停止
+      //     for (let j = 0; j < dest.length; j++) {
+      //       let key = Object.keys(dest[j]);
+      //       if (key == i.shop_name && dest[j][key].indexOf(i) == -1) {
+      //         dest[j][key].push(i);
+      //         break;
+      //       }
+      //     }
+      //   }
+      // });
+      // this.order = dest;
+      // ----------------第二种方法-----------------
+      let obj = {};
+      this.orderData.forEach((item) => {
+        // 从一个对象中取出一个键的值
+        let { shop_name } = item;
+        if (!obj[shop_name]) {
+          obj[shop_name] = [];
+        }
+        obj[shop_name].push(item);
+      });
+      this.order = obj;
     },
   },
   computed: {
@@ -61,12 +122,13 @@ export default {
         ? this.$store.state.userInfo[0]
         : this.$store.state.userInfo;
     },
+    orderData() {
+      return JSON.parse(this.$route.params.shopId);
+    },
   },
-  mounted() {},
-  activated() {},
-  deactivated() {},
 };
 </script>
+
 <style lang='less' scoped>
 .accounts-content {
   position: absolute;
@@ -97,6 +159,9 @@ export default {
       line-height: 60px;
       flex: 1;
     }
+  }
+  .orderShop {
+    padding: 10px;
   }
 }
 </style>

@@ -12,12 +12,11 @@ export default {
             if (res.code != 200) return console.log('请求数据失败')
             state.shopCartLen = res.data.length;
             res.data.forEach(item => {//循环的是所有数据
-                if (state.shopCart[item.shop_name]) {
-                    state.shopCart[item.shop_name].push(item)
-                } else {
+                if (!state.shopCart[item.shop_name]) {
                     state.shopNameArr.push(item.shop_name)
                     state.shopCart[item.shop_name] = [item]
                 }
+                state.shopCart[item.shop_name].push(item)
                 if (item.ischeck == '1') {
                     state.totalPayment += item.money_now * item.num
                     state.totalNum += item.num

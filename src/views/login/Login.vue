@@ -120,11 +120,7 @@ export default {
     loginClick() {
       if (this.code == "123123") {
         console.log("验证码正确");
-        let obj = {
-          phone: this.phone,
-          isHave: 0,
-        };
-        haveData(isPhone, obj, (res) => {
+        haveData(isPhone, this.phone, (res) => {
           console.log(res);
           if (res.code != 200) {
             // 直接登录然后跳转

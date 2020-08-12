@@ -102,6 +102,7 @@ export default {
   name: "Shopcart",
   created() {
     this.getShopCart();
+    console.log(this.shopNameArr);
   },
   data() {
     return {
@@ -174,7 +175,15 @@ export default {
     // 去结算 操作
     accounts() {
       if (this.userInfo) {
-        this.jumpPage("/accounts");
+        let arr = [];
+        for (let i in this.shopCart) {
+          for (let j in this.shopCart[i]) {
+            if (this.shopCart[i][j].ischeck == "1") {
+              arr.push(this.shopCart[i][j]);
+            }
+          }
+        }
+        this.jumpPage("/accounts/" + JSON.stringify(arr));
       } else {
         this.jumpPage("/login");
       }

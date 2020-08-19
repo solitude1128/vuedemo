@@ -85,6 +85,13 @@ export function isPhone(phone) {
     })
 }
 // 用户注册
+export function Register(data) {
+    return requestPost({
+        url: "/vuedemo/register",
+        data
+    })
+}
+// 手机号注册先留着...登录页在用
 export function land(obj) {
     return requestPost({
         url: "/vuedemo/login",
@@ -98,13 +105,18 @@ export function land(obj) {
     })
 }
 // 用户登录
-export function login(obj) {
+export function login(data) {
     return requestPost({
         url: "/vuedemo/land",
+        data
+    })
+}
+// 自动登录
+export function autoCode(code) {
+    return requestPost({
+        url: "/vuedemo/autoland",
         data: {
-            actionKey: obj.action,
-            username: obj.uName,
-            password: obj.pwd,
+            autocode: code
         }
     })
 }
@@ -134,15 +146,68 @@ export function postShopCart(uid) {
     })
 }
 // 修改购物车数据
-export function updateShopcart() {
-    return request({
-        url: "/vuedemo/update_shopcart"
+export function updateShopcart(data) {
+    return requestPost({
+        url: '/vuedemo/update_shopcart',
+        data
     })
 }
 // 删除购物车数据
 export function deleteShopcart() {
     return request({
         url: "/vuedemo/delete_shopcart"
+    })
+}
+// 生成订单
+export function createOrder(data) {
+    return requestPost({
+        url: "/vuedemo/creat_order",
+        data
+    })
+}
+// 获取该用户的所有订单
+export function getOrder(data) {
+    return requestPost({
+        url: "/vuedemo/get_order",
+        // 两个参数 一个user_id 一个state订单状态 1---待支付 2---支付成功 3---支付失败
+        data
+    })
+}
+// 获取订单内商品信息
+export function getOrderGoods(id) {
+    return requestPost({
+        url: "/vuedemo/get_goods_inorder",
+        data: {
+            order_id: id
+        }
+    })
+}
+// 修改订单状态
+export function updateOrderState(data) {
+    return requestPost({
+        url: "/vuedemo/update_order_state",
+        // 有两个参数 一个订单编号 一个订单状态
+        data
+    })
+}
+// 取消订单
+export function cancelOrder(id) {
+    return requestPost({
+        url: "/vuedemo/cancel_order",
+        // 只有状态为1的订单才可以取消
+        data: {
+            order_id: id
+        }
+    })
+}
+// 删除订单
+export function deleteOrder(id) {
+    return requestPost({
+        url: "/vuedemo/cancel_order",
+        // 只有状态为2,3的订单才可以删除,删除订单时改订单及相关数据都要完全删除
+        data: {
+            order_id: id
+        }
     })
 }
 // 获取关联商品
@@ -165,4 +230,25 @@ export class goods {
         this.norms = norms
         this.relationGoods = relationGoods
     }
+}
+export function getProvinces() {
+    return request({
+        url: "/vuedemo/get_provinces"
+    })
+}
+export function getCities(id) {
+    return request({
+        url: "/vuedemo/get_cities",
+        params: {
+            provinceid: id
+        }
+    })
+}
+export function getAreas(id) {
+    return request({
+        url: "/vuedemo/get_areas",
+        params: {
+            cityid: id
+        }
+    })
 }

@@ -35,16 +35,15 @@
           src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1595926082386&di=f12c16e500b5e0de2071023e10eb46cd&imgtype=0&src=http%3A%2F%2Ftupian.qqw21.com%2Farticle%2FUploadPic%2F2020-6%2F2020617225141628.jpg"
         ></el-avatar>
         <div class="myname">
-          <!-- <span>{{userInfo.tel}}</span> -->
           <span>
-            啊啊啊啊啊
+            {{userInfo.tel}}
             <span class="el-icon-edit-outline"></span>
           </span>
-          <p v-if="userInfo">用户名:{{userInfo.name}}</p>
+          <p>用户名:{{userInfo.name}}</p>
         </div>
       </div>
       <div class="myCell">
-        <a v-for="(i,index) in cellArr" :key="index">
+        <a v-for="(i,index) in cellArr" :key="index" @click="jumpPage(i.path)">
           <img :src="i.img" width="20%" />
           <p>{{i.name}}</p>
         </a>
@@ -107,6 +106,7 @@ export default {
           name: "全部订单",
           img:
             "https://img30.360buyimg.com/jdphoto/jfs/t14953/346/2113764063/185/1a1dcd24/5a6d7b8bN8431ea1a.png",
+          path: "/allOrder",
         },
       ],
       cellArr2: [
@@ -190,10 +190,7 @@ export default {
     navBar,
     Scroll,
   },
-  created() {
-    console.log(this.userInfo);
-    if (!this.userInfo) this.jumpPage("/login");
-  },
+  created() {},
   methods: {
     pushRouter(path) {
       this.$router.push(path);
@@ -206,9 +203,7 @@ export default {
   },
   computed: {
     userInfo() {
-      return this.$store.state.userInfo
-        ? this.$store.state.userInfo[0]
-        : this.$store.state.userInfo;
+      return this.$store.state.userInfo;
     },
   },
 };

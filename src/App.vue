@@ -15,16 +15,14 @@
 <script>
 import jdTabbar from "components/content/mainTabbar/JdTabbar";
 import jxTabbar from "components/content/mainTabbar/JxTabbar";
-import { requestCity } from "network/request";
 export default {
   name: "App",
   created() {
-    requestCity().then((res) => {
-      // 如果没有用户登录,则配送地址为获取的地址
-      this.$store.state.address = eval(
-        "(" + res.slice(res.indexOf("=") + 1, res.length - 1) + ")"
-      ).cname;
-    });
+    if (localStorage.autocode) {
+      this.$store.dispatch("getUserInfo", localStorage.autocode);
+    } else {
+      this.jumpPage("/login");
+    }
   },
   components: {
     jdTabbar,
@@ -36,13 +34,6 @@ export default {
     },
     isJxTabBar() {
       return this.$store.state.TabBar.isJxTabBar;
-    },
-    user() {
-      return (
-        this.$store.state.userInfo != "" &&
-        this.$store.state.userInfo != null &&
-        this.$store.state.userInfo != undefined
-      );
     },
   },
 };

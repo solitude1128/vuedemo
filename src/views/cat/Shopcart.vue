@@ -98,11 +98,13 @@
 import navBar from "components/common/navbar/NavBar";
 import Scroll from "components/content/scroll/Scroll";
 import cartData from "./childCom/cartData";
+import { updateShopcart } from "network";
+import { haveData } from "common/common";
+import { requestCity } from "network/request";
 export default {
   name: "Shopcart",
-  created() {
-    this.getShopCart();
-    console.log(this.shopNameArr);
+  activated() {
+    this.getShopCar(this.userInfo.id);
   },
   data() {
     return {
@@ -115,12 +117,21 @@ export default {
     Scroll,
     cartData,
   },
+  beforeRouteLeave(to, from, next) {
+    this.upDateShopCart();
+    next();
+  },
   methods: {
     pushRouter(path) {
       this.jumpPage(path);
     },
-    getShopCart() {
-      this.$store.dispatch("getShopCart", this.$store.state);
+    getShopCar(a) {
+      requestCity().then((res) => {
+        this.$store.state.address = eval(
+          "(" + res.slice(res.indexOf("=") + 1, res.length - 1) + ")"
+        ).cname;
+      });
+      this.$store.dispatch("getShopCart", a);
     },
     shopCartScroll(position) {
       if (position.y >= 0) {
@@ -188,15 +199,42 @@ export default {
         this.jumpPage("/login");
       }
     },
-    //
     // 点击规格发生的事件
     selectNorm(obj) {
       console.log(obj);
+    },
+    //在页面离开的时候。调用方法，修改数据库的值
+    upDateShopCart() {
+      let shopCart = { ...this.shopCart };
+      let shopCartHistory = { ...this.shopCartHistory };
+      for (let i in shopCart) {
+        for (let j = 0; j < shopCart[i].length; j++) {
+          if (
+            shopCart[i][j].ischeck != shopCartHistory[i][j].ischeck ||
+            shopCart[i][j].num != shopCartHistory[i][j].num ||
+            shopCart[i][j].norm != shopCartHistory[i][j].norm
+          ) {
+            //请求修改购物车的接口  把数据传递上去。修改购物车数据
+            // console.log(shopCart[i][j]);
+            let data = {};
+            data.id = shopCart[i][j].id;
+            data.num = shopCart[i][j].num;
+            data.ischeck = shopCart[i][j].ischeck;
+            data.norm = shopCart[i][j].norm;
+            haveData(updateShopcart, data, (res) => {
+              console.log(res);
+            });
+          }
+        }
+      }
     },
   },
   computed: {
     shopCart() {
       return this.$store.state.shopCart;
+    },
+    shopCartHistory() {
+      return this.$store.state.shopCartHistory;
     },
     totalPayment() {
       return this.$store.state.totalPayment;
@@ -205,12 +243,15 @@ export default {
       return this.$store.state.totalNum;
     },
     userInfo() {
-      return this.$store.state.userInfo
-        ? this.$store.state.userInfo[0]
-        : this.$store.state.userInfo;
+      return this.$store.state.userInfo;
     },
     shopNameArr() {
       return this.$store.state.shopNameArr;
+    },
+  },
+  watch: {
+    userInfo(newVal) {
+      this.getShopCar(newVal.id);
     },
   },
   filters: {

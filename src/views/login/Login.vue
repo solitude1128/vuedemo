@@ -86,11 +86,6 @@ export default {
   components: {
     navBar,
   },
-  computed: {},
-  created() {
-    console.log(this.$store.state.userInfo);
-  },
-  mounted() {},
   methods: {
     changeRegion() {
       alert("aaa");
@@ -149,14 +144,18 @@ export default {
     // 密码登录的点击事件
     userClick() {
       let obj = {
-        action: "account",
-        uName: this.phoneName,
-        pwd: this.password,
+        actionKey: "account",
+        username: this.phoneName,
+        password: this.password,
       };
       haveData(login, obj, (res) => {
         if (res.code != 200) return;
-        this.$store.state.userInfo = res.data;
-        localStorage.user = JSON.stringify(res.data);
+        localStorage.autocode = res.data.user.autocode;
+        this.$store.state.userInfo.defaddr = res.data.defaddr;
+        for (let i in res.data.user) {
+          this.$store.state.userInfo[i] = res.data.user[i];
+        }
+        console.log(this.$store.state.userInfo);
         this.jumpPage("/home");
       });
     },

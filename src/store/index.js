@@ -13,7 +13,7 @@ const st = {
         isJxTabBar: false
     },
     // 用户名
-    userInfo: localStorage.user ? JSON.parse(localStorage.user) : null,
+    userInfo: {},
     keepExclude: "Details,Cart",
     path: "http://106.12.85.17:8090/public/image",
     loginRecords: '',//进入login的记录
@@ -25,7 +25,8 @@ const st = {
     totalNum: 0,//支付数量
     shopCarMoneyAll: 0,//记录购物车所有商品价钱总和
     shopCarNumAll: 0,//记录购物车商品总数量
-    shopNameArr:[],//商铺名字的数组
+    shopNameArr: [],//商铺名字的数组
+    shopCartHistory: {},//在页面渲染的时候,购物车加载的时候取一下默认值,在离开购物车页面的时候,用购物车页面的值,和当前值做对比,存在的值,对比后提交数据
 }
 
 const x = new Vuex.Store({

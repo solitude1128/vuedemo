@@ -40,12 +40,24 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-    <div v-else>啊啊啊</div>
+    <div v-else class="bigBox">
+      <div class="inputBox">
+        <i class="el-icon-lock"></i>
+        <el-input placeholder="请设置登录密码" show-password v-model="pwd" clearable></el-input>
+      </div>
+      <el-button type="danger" :disabled="!pwd" @click="register()">完成</el-button>
+      <p>
+        <span>遇到问题? 请</span>
+        <a>联系客服</a>
+      </p>
+    </div>
   </div>
 </template>
 
 <script>
 import navBar from "components/common/navbar/NavBar";
+import { Register } from "network";
+import { haveData } from "common/common";
 export default {
   name: "Register",
   data() {
@@ -64,6 +76,20 @@ export default {
     navBar,
   },
   methods: {
+    register() {
+      let obj = {
+        telphone: this.phone,
+        password: this.pwd,
+      };
+      haveData(Register, obj, (res) => {
+        console.log(res);
+        if (res.code != 200) {
+          this.jumpPage("/login");
+        } else {
+          this.jumpPage("/home");
+        }
+      });
+    },
     open() {
       let template =
         "<div><span>在您注册成为京东用户的过程中，您需要完成我们的注册流程并通过点击同意的形式在线签署以下协议，</span><span style='text-decoration: underline;'>请您务必仔细阅读、充分理解协议中的条款内容后再点击同意（尤其是以粗体并下划线标识的条款，因为这些条款可能会明确您应履行的义务或对您的权利有所限制）：</span><p>《京东用户注册协议》</p><p>《京东隐私政策》</p><p>《订单共享与安全》</p><p style='font-size:12px;'>点击同意即表示您已阅读并同意<a href='https:/in.m.jd.com/help/app/register_info.html'>《京东用户注册协议》</a>与<a href='https://in.m.jd.com/help/app/private_policy.html'>《京东隐私策》</a>并将您的订单信息共享给为完成此订单所必须的第三方合作方。关于 <a href='https://in.m.jd.com/help/app/order_sharing_info.html'>《订单共享与安全》</a></p></div>";
@@ -118,6 +144,16 @@ export default {
       }
       .el-input {
         flex: 4;
+      }
+    }
+    p {
+      text-align: left;
+      font-size: 16px;
+      span {
+        color: rgb(218, 218, 218);
+      }
+      a {
+        color: rgb(110, 186, 248);
       }
     }
   }

@@ -1,5 +1,5 @@
 <template>
-  <div id="accounts">
+  <div id="accounts" v-if="userInfo">
     <scroll
       class="accounts-content"
       :probeType="3"
@@ -14,40 +14,22 @@
         </div>
         <div slot="center">确认订单</div>
       </nav-bar>
-      {{order}}
       <!-- 配送地址 -->
-      <div class="address">
+      <div class="address" @click="toaddr">
         <div>
           <p>
-            <span>{{userInfo?userInfo.name:''}}</span>
-            <span>{{userInfo?userInfo.tel:''}}</span>
+            <span>{{userInfo.name}}</span>
+            <span>{{userInfo.tel}}</span>
           </p>
-          <span>高房子的边边儿倒三个拐拐儿转四个弯弯儿</span>
+          <span>{{userInfo.defaddr?userInfo.defaddr:'添加地址'}}</span>
+          <!-- 高房子的边边儿倒三个拐拐儿转四个弯弯儿 -->
         </div>
         <span class="rightBox">
           <i class="el-icon-arrow-right"></i>
         </span>
       </div>
       <!-- 订单展示 -->
-      <order-shop v-for="(i,key) in order" :key="key" :shop="i">
-        <div>
-          <strong slot="header">
-            <i class="el-icon-s-shop"></i>
-            {{key}}
-            {{i}}
-          </strong>
-          <!-- <div v-for="(j,index) in order[key]  ::key="index"">
-            <img
-              slot="imgBox"
-              src="http://106.12.85.17:8090/public/image/goods/jd_wjyq_synl5_cover1.jpg"
-              width="100%"
-            />
-            <div slot="shopBox">
-              <p>{{i.}}</p>
-            </div>
-          </div>-->
-        </div>
-      </order-shop>
+      <order-shop :shop="order" :sMoney="shopMoney" @cpayment="payment"></order-shop>
     </scroll>
   </div>
 </template>
@@ -56,6 +38,8 @@
 import navBar from "components/common/navbar/NavBar";
 import Scroll from "components/content/scroll/Scroll";
 import orderShop from "./childCom/orderShop";
+import { createOrder } from "network";
+import { haveData } from "common/common";
 export default {
   name: "Accounts",
   created() {
@@ -67,6 +51,8 @@ export default {
   data() {
     return {
       order: {},
+      orderCommit: {},
+      shopMoney: 0,
     };
   },
   components: {
@@ -78,6 +64,13 @@ export default {
     aScroll(position) {
       if (position.y >= 0) {
         this.$refs.accScroll.scrollTo(0, 0, 100);
+      }
+    },
+    toaddr() {
+      if (this.userInfo.defaddr) {
+        this.jumpPage("/upAddr");
+      } else {
+        this.jumpPage("/newAddr/new");
       }
     },
     convert() {
@@ -112,15 +105,29 @@ export default {
           obj[shop_name] = [];
         }
         obj[shop_name].push(item);
+        this.shopMoney += item.money_now * item.num * 1;
       });
       this.order = obj;
+    },
+    payment(allMoney) {
+      this.orderCommit.user_id = this.userInfo.id;
+      this.orderCommit.shopcarts_id = [];
+      this.orderData.forEach((item) => {
+        this.orderCommit.shopcarts_id.push(item.id);
+      });
+      console.log(this.orderCommit);
+      console.log(allMoney);
+      if (window.confirm("是否确认提交订单")) {
+        haveData(createOrder, this.orderCommit, (res) => {
+          if (res.code != 200) return;
+          this.jumpPage("/payment/" + res.data.order_id + "/" + allMoney);
+        });
+      }
     },
   },
   computed: {
     userInfo() {
-      return this.$store.state.userInfo
-        ? this.$store.state.userInfo[0]
-        : this.$store.state.userInfo;
+      return this.$store.state.userInfo;
     },
     orderData() {
       return JSON.parse(this.$route.params.shopId);

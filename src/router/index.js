@@ -129,6 +129,47 @@ const routes = [
             title: "确认订单"
         },
     },
+    {
+        path: "/upaddr",
+        name: "upAddr",
+        component: () => import("views/accounts/childCom/upAddr"),
+        meta: {
+            title: "修改地址"
+        },
+    },
+    {
+        path: "/newaddr/:addrId",
+        name: "newAddr",
+        component: () => import("views/accounts/childCom/newAddr"),
+        meta: {
+            title: "新增地址"
+        },
+    },
+    {
+        path: "/payment/:orderId/:allMoney",//去支付页面带订单编号和总价
+        name: "Payment",
+        component: () => import("views/payment/Payment"),
+        meta: {
+            title: "支付页面"
+        },
+    },
+    {
+        path: "/pok",
+        name: "Pok",
+        component: () => import("views/pok/Pok"),
+        meta: {
+            title: "支付成功"
+        },
+    },
+    {
+        path: "/allOrder",
+        name: "AllOrder",
+        component: () => import("views/allOrder/AllOrder"),
+        meta: {
+            title: "全部订单"
+        },
+    },
+
 ]
 
 // 3.创建一个vue-router实例
